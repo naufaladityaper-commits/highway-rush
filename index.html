@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIGHWAY RUSH</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#10151d;color:white;
+  font-family:Arial,sans-serif;text-align:center;
+}
+h1{margin:12px 0;color:#42caff}
+#game{
+  width:min(100%,420px);height:auto;
+  background:#315d30;display:block;margin:auto;
+  border:3px solid #444;border-radius:12px;
+  touch-action:none;
+}
+.hud{display:flex;justify-content:space-around;padding:10px}
+.skills{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:7px;max-width:420px;margin:10px auto;
+}
+button{
+  border:0;border-radius:10px;padding:12px 5px;
+  background:#187fc0;color:white;font-weight:bold;
+  font-size:13px;
+}
+button:disabled{opacity:.4}
+.controls{display:flex;justify-content:center;gap:25px;margin:12px}
+.controls button{width:100px;font-size:20px}
+#overlay{
+  position:fixed;inset:0;background:#000c;
+  display:flex;align-items:center;justify-content:center;
+}
+.panel{
+  background:#202b3a;padding:25px;border-radius:16px;
+  width:85%;max-width:340px;
+}
+#overlay button{width:100%;margin-top:12px}
+</style>
+</head>
+<body>
+
+<h1>HIGHWAY RUSH</h1>
+
+<div class="hud">
+  <span>🏆 SCORE: <b id="score">0</b></span>
+  <span>⚡ SPEED: <b id="speed">1</b></span>
+</div>
+
+<canvas id="game" width="390" height="560"></canvas>
+
+<div class="skills">
+  <button id="mega" onclick="activateSkill('mega')">
+    🚙 MEGA CAR<br>50 DETIK
+  </button>
+  <button id="fly" onclick="activateSkill('fly')">
+    ✈️ FLY<br>40 DETIK
+  </button>
+  <button id="slow" onclick="activateSkill('slow')">
+    🐢 SLOW TIME<br>60 DETIK
+  </button>
+</div>
+
+<div class="controls">
+  <button onclick="move(-1)">⬅ KIRI</button>
+  <button onclick="move(1)">KANAN ➡</button>
+</div>
+
+<div id="overlay">
+  <div class="panel">
+    <h2 id="message">HIGHWAY RUSH</h2>
+    <p id="submessage">Hindari kendaraan dan gunakan skill!</p>
+    <button onclick="startGame()">MULAI GAME</button>
+  </div>
+</div>
+
+<script>
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+
+const lanes=[105,195,285];
+
+let lane=1;
+let playerX=195;
+let obstacles=[];
+let trees=[];
+let score=0;
+let speed=3;
+let running=false;
+let lastTime=0;
+let roadOffset=0;
+
+let skills={
+ mega:0,
+ fly:0,
+ slow:0
+};
+
+const duration={
+ mega:50,
+ fly:40,
+ slow:60
+};
+
+function startGame(){
+ score=0;
+ speed=3;
+ lane=1;
+ playerX=195;
+ obstacles=[];
+ trees=[];
+ skills={mega:0,fly:0,slow:0};
+ running=true;
+ lastTime=0;
+
+ for(let i=0;i<12;i++){
+   trees.push({
+     x:Math.random()<.5?35:355,
+     y:i*65
+   });
+ }
+
+ document.getElementById("overlay").style.display="none";
+ requestAnimationFrame(loop);
+}
+
+function move(d){
+ if(!running)return;
+ lane=Math.max(0,Math.min(2,lane+d));
+}
+
+function activateSkill(name){
+ if(!running||skills[name]>0)return;
+ skills[name]=duration[name];
+}
+
+function drawCar(x,y,color,scale=1){
+ ctx.save();
+ ctx.translate(x,y);
+ ctx.scale(scale,scale);
+
+ ctx.fillStyle="#111";
+ ctx.fillRect(-15,-20,30,42);
+
+ ctx.fillStyle=color;
+ ctx.fillRect(-12,-24,24,43);
+
+ ctx.fillStyle="#9deaff";
+ ctx.fillRect(-9,-16,18,10);
+
+ ctx.fillStyle="#222";
+ ctx.fillRect(-15,-15,5,12);
+ ctx.fillRect(10,-15,5,12);
+
+ ctx.fillStyle="#fff";
+ ctx.fillRect(-9,15,5,4);
+ ctx.fillRect(4,15,5,4);
+
+ ctx.restore();
+}
+
+function drawTree(x,y){
+ ctx.fillStyle="#75421d";
+ ctx.fillRect(x-4,y+5,8,19);
+
+ ctx.fillStyle="#126b2c";
+ ctx.beginPath();
+ ctx.arc(x,y,15,0,Math.PI*2);
+ ctx.fill();
+
+ ctx.fillStyle="#218b37";
+ ctx.beginPath();
+ ctx.arc(x-6,y-5,10,0,Math.PI*2);
+ ctx.fill();
+}
+
+function drawRoad(){
+ ctx.fillStyle="#35733a";
+ ctx.fillRect(0,0,390,560);
+
+ // pepohonan
+ for(let t of trees){
+   drawTree(t.x,t.y);
+ }
+
+ // jalan
+ ctx.fillStyle="#34383d";
+ ctx.fillRect(60,0,270,560);
+
+ // pinggir jalan
+ ctx.fillStyle="#eee";
+ ctx.fillRect(60,0,5,560);
+ ctx.fillRect(325,0,5,560);
+
+ // garis jalur
+ ctx.fillStyle="#eee";
+ for(let y=-40;y<600;y+=80){
+   ctx.fillRect(148,y+roadOffset,4,40);
+   ctx.fillRect(238,y+roadOffset,4,40);
+ }
+}
+
+function spawnObstacle(){
+ const l=Math.floor(Math.random()*3);
+ obstacles.push({
+   x:lanes[l],
+   y:-50,
+   lane:l
+ });
+}
+
+let spawnTimer=0;
+
+function update(dt){
+ let slowActive=skills.slow>0;
+ let currentSpeed=slowActive?3:speed;
+
+ roadOffset=(roadOffset+currentSpeed*dt/16)%80;
+
+ // skill timer
+ for(let name in skills){
+   if(skills[name]>0){
+     skills[name]=Math.max(0,skills[name]-dt/1000);
+   }
+ }
+
+ // smooth steering
+ playerX+=(lanes[lane]-playerX)*Math.min(1,dt/75);
+
+ // pepohonan terus muncul
+ for(let t of trees){
+   t.y+=currentSpeed*dt/16;
+   if(t.y>590){
+     t.y=-30;
+     t.x=Math.random()<.5?35:355;
+   }
+ }
+
+ // kendaraan lain
+ spawnTimer+=dt;
+ if(spawnTimer>Math.max(450,1050-score*2)){
+   spawnObstacle();
+   spawnTimer=0;
+ }
+
+ for(let o of obstacles){
+   o.y+=currentSpeed*dt/16;
+
+   let close=Math.abs(o.y-455)<34 &&
+             Math.abs(o.x-playerX)<35;
+
+   if(close){
+     if(skills.mega>0){
+       o.y=700;
+       score+=5;
+     }else if(skills.fly<=0){
+       endGame();
+       return;
+     }
+   }
+
+   if(o.y>580&&!o.passed){
+     o.passed=true;
+     score++;
+   }
+ }
+
+ obstacles=obstacles.filter(o=>o.y<620);
+
+ if(!slowActive){
+   speed=3+score*.035;
+ }
+
+ document.getElementById("score").textContent=score;
+ document.getElementById("speed").textContent=
+   (currentSpeed/3).toFixed(1)+"x";
+
+ updateSkillButtons();
+}
+
+function updateSkillButtons(){
+ const names=["mega","fly","slow"];
+ names.forEach(name=>{
+   const b=document.getElementById(name);
+   b.disabled=skills[name]>0;
+   b.innerHTML=(
+     name==="mega"?"🚙 MEGA CAR":
+     name==="fly"?"✈️ FLY":"🐢 SLOW TIME"
+   )+"<br>"+(
+     skills[name]>0?
+     Math.ceil(skills[name])+" DETIK":
+     "SIAP"
+   );
+ });
+}
+
+function draw(){
+ drawRoad();
+
+ // kendaraan musuh
+ for(let o of obstacles){
+   drawCar(o.x,o.y,"#e64b42");
+ }
+
+ // bayangan saat terbang
+ if(skills.fly>0){
+   ctx.globalAlpha=.25;
+   drawCar(playerX,465,"#111");
+   ctx.globalAlpha=1;
+ }
+
+ // mobil pemain
+ let size=skills.mega>0?1.55:1;
+
+ let playerY=skills.fly>0?425:455;
+
+ drawCar(
+   playerX,
+   playerY,
+   skills.mega>0?"#ffb52e":"#168de0",
+   size
+ );
+
+ // efek terbang
+ if(skills.fly>0){
+   ctx.fillStyle="white";
+   ctx.font="13px Arial";
+   ctx.fillText("✈ FLYING",playerX-30,playerY-35);
+ }
+}
+
+function loop(time){
+ if(!running)return;
+
+ let dt=lastTime?Math.min(time-lastTime,40):16;
+ lastTime=time;
+
+ update(dt);
+ if(!running)return;
+
+ draw();
+ requestAnimationFrame(loop);
+}
+
+function endGame(){
+ running=false;
+
+ document.getElementById("message").textContent="GAME OVER!";
+ document.getElementById("submessage").textContent=
+   "Skor kamu: "+score;
+
+ document.getElementById("overlay").style.display="flex";
+}
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="ArrowLeft"||e.key==="a")move(-1);
+ if(e.key==="ArrowRight"||e.key==="d")move(1);
+ if(e.key==="1")activateSkill("mega");
+ if(e.key==="2")activateSkill("fly");
+ if(e.key==="3")activateSkill("slow");
+});
+
+// kontrol geser layar
+let touchStart=null;
+
+canvas.addEventListener("touchstart",e=>{
+ touchStart=e.touches[0].clientX;
+},{passive:true});
+
+canvas.addEventListener("touchend",e=>{
+ if(touchStart===null)return;
+ let delta=e.changedTouches[0].clientX-touchStart;
+ if(Math.abs(delta)>25)move(delta>0?1:-1);
+ touchStart=null;
+},{passive:true});
+</script>
+</body>
+  </html>
+                 
