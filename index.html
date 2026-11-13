@@ -3,43 +3,50 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HIGHWAY RUSH</title>
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;background:#10151d;color:white;
-  font-family:Arial,sans-serif;text-align:center;
+ margin:0;background:#10151d;color:white;
+ font-family:Arial,sans-serif;text-align:center
 }
-h1{margin:12px 0;color:#42caff}
+h1{color:#42caff;margin:12px}
+.hud{
+ display:flex;justify-content:space-around;
+ padding:10px;font-weight:bold
+}
 #game{
-  width:min(100%,420px);height:auto;
-  background:#315d30;display:block;margin:auto;
-  border:3px solid #444;border-radius:12px;
-  touch-action:none;
+ width:min(100%,420px);height:auto;
+ display:block;margin:auto;
+ border:3px solid #444;border-radius:12px;
+ touch-action:pan-y
 }
-.hud{display:flex;justify-content:space-around;padding:10px}
 .skills{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:7px;max-width:420px;margin:10px auto;
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:7px;max-width:420px;margin:12px auto
 }
 button{
-  border:0;border-radius:10px;padding:12px 5px;
-  background:#187fc0;color:white;font-weight:bold;
-  font-size:13px;
+ border:0;border-radius:10px;padding:12px 5px;
+ background:#187fc0;color:white;
+ font-weight:bold;font-size:12px
 }
 button:disabled{opacity:.4}
-.controls{display:flex;justify-content:center;gap:25px;margin:12px}
-.controls button{width:100px;font-size:20px}
+.controls{
+ display:flex;justify-content:center;
+ gap:25px;margin:12px
+}
+.controls button{width:110px;font-size:18px}
 #overlay{
-  position:fixed;inset:0;background:#000c;
-  display:flex;align-items:center;justify-content:center;
+ position:fixed;inset:0;background:#000c;
+ display:flex;align-items:center;justify-content:center
 }
 .panel{
-  background:#202b3a;padding:25px;border-radius:16px;
-  width:85%;max-width:340px;
+ background:#202b3a;padding:24px;
+ border-radius:16px;width:85%;max-width:340px
 }
-#overlay button{width:100%;margin-top:12px}
+.panel button{width:100%;margin-top:12px}
+.note{font-size:12px;color:#aaa}
 </style>
 </head>
 <body>
@@ -47,35 +54,37 @@ button:disabled{opacity:.4}
 <h1>HIGHWAY RUSH</h1>
 
 <div class="hud">
-  <span>🏆 SCORE: <b id="score">0</b></span>
-  <span>⚡ SPEED: <b id="speed">1</b></span>
+ <span>🏆 SCORE: <b id="score">0</b></span>
+ <span>⚡ SPEED: <b id="speed">1x</b></span>
 </div>
 
 <canvas id="game" width="390" height="560"></canvas>
 
 <div class="skills">
-  <button id="mega" onclick="activateSkill('mega')">
-    🚙 MEGA CAR<br>50 DETIK
-  </button>
-  <button id="fly" onclick="activateSkill('fly')">
-    ✈️ FLY<br>40 DETIK
-  </button>
-  <button id="slow" onclick="activateSkill('slow')">
-    🐢 SLOW TIME<br>60 DETIK
-  </button>
+ <button id="mega" onclick="activateSkill('mega')" disabled>
+ 🚙 MEGA CAR<br>LOCKED
+ </button>
+ <button id="fly" onclick="activateSkill('fly')" disabled>
+ ✈️ FLY<br>LOCKED
+ </button>
+ <button id="slow" onclick="activateSkill('slow')" disabled>
+ 🐢 SLOW TIME<br>LOCKED
+ </button>
 </div>
 
+<p class="note">Skill terbuka pada skor 150. Cooldown bersama: 90 detik.</p>
+
 <div class="controls">
-  <button onclick="move(-1)">⬅ KIRI</button>
-  <button onclick="move(1)">KANAN ➡</button>
+ <button onclick="move(-1)">⬅ KIRI</button>
+ <button onclick="move(1)">KANAN ➡</button>
 </div>
 
 <div id="overlay">
-  <div class="panel">
-    <h2 id="message">HIGHWAY RUSH</h2>
-    <p id="submessage">Hindari kendaraan dan gunakan skill!</p>
-    <button onclick="startGame()">MULAI GAME</button>
-  </div>
+ <div class="panel">
+  <h2 id="message">HIGHWAY RUSH</h2>
+  <p id="submessage">Hindari kendaraan dan raih skor tertinggi!</p>
+  <button onclick="startGame()">MULAI GAME</button>
+ </div>
 </div>
 
 <script>
@@ -93,6 +102,13 @@ let speed=3;
 let running=false;
 let lastTime=0;
 let roadOffset=0;
+let spawnTimer=0;
+
+const duration={
+ mega:50,
+ fly:40,
+ slow:60
+};
 
 let skills={
  mega:0,
@@ -100,11 +116,9 @@ let skills={
  slow:0
 };
 
-const duration={
- mega:50,
- fly:40,
- slow:60
-};
+// Cooldown bersama untuk semua skill
+let globalCooldown=0;
+let activeSkill=null;
 
 function startGame(){
  score=0;
@@ -114,17 +128,22 @@ function startGame(){
  obstacles=[];
  trees=[];
  skills={mega:0,fly:0,slow:0};
- running=true;
+ globalCooldown=0;
+ activeSkill=null;
+ roadOffset=0;
+ spawnTimer=0;
  lastTime=0;
 
- for(let i=0;i<12;i++){
-   trees.push({
-     x:Math.random()<.5?35:355,
-     y:i*65
-   });
+ for(let i=0;i<14;i++){
+  trees.push({
+   x:Math.random()<.5?35:355,
+   y:i*48
+  });
  }
 
+ running=true;
  document.getElementById("overlay").style.display="none";
+ updateSkillButtons();
  requestAnimationFrame(loop);
 }
 
@@ -134,8 +153,14 @@ function move(d){
 }
 
 function activateSkill(name){
- if(!running||skills[name]>0)return;
+ if(!running)return;
+ if(score<150)return;
+ if(activeSkill!==null)return;
+ if(globalCooldown>0)return;
+
+ activeSkill=name;
  skills[name]=duration[name];
+ updateSkillButtons();
 }
 
 function drawCar(x,y,color,scale=1){
@@ -182,161 +207,189 @@ function drawRoad(){
  ctx.fillStyle="#35733a";
  ctx.fillRect(0,0,390,560);
 
- // pepohonan
  for(let t of trees){
-   drawTree(t.x,t.y);
+  drawTree(t.x,t.y);
  }
 
- // jalan
  ctx.fillStyle="#34383d";
  ctx.fillRect(60,0,270,560);
 
- // pinggir jalan
  ctx.fillStyle="#eee";
  ctx.fillRect(60,0,5,560);
  ctx.fillRect(325,0,5,560);
 
- // garis jalur
  ctx.fillStyle="#eee";
- for(let y=-40;y<600;y+=80){
-   ctx.fillRect(148,y+roadOffset,4,40);
-   ctx.fillRect(238,y+roadOffset,4,40);
+ for(let y=-80;y<600;y+=80){
+  ctx.fillRect(148,y+roadOffset,4,40);
+  ctx.fillRect(238,y+roadOffset,4,40);
  }
 }
 
 function spawnObstacle(){
  const l=Math.floor(Math.random()*3);
  obstacles.push({
-   x:lanes[l],
-   y:-50,
-   lane:l
+  x:lanes[l],
+  y:-50,
+  passed:false
  });
 }
 
-let spawnTimer=0;
-
 function update(dt){
- let slowActive=skills.slow>0;
- let currentSpeed=slowActive?3:speed;
+ const slowActive=skills.slow>0;
+ const currentSpeed=slowActive?3:speed;
+ const step=dt/16;
 
- roadOffset=(roadOffset+currentSpeed*dt/16)%80;
+ roadOffset=(roadOffset+currentSpeed*step)%80;
 
- // skill timer
- for(let name in skills){
-   if(skills[name]>0){
-     skills[name]=Math.max(0,skills[name]-dt/1000);
-   }
+ // Timer skill
+ if(activeSkill!==null){
+  skills[activeSkill]=Math.max(
+   0,skills[activeSkill]-dt/1000
+  );
+
+  if(skills[activeSkill]===0){
+   activeSkill=null;
+   globalCooldown=90;
+  }
+ }else if(globalCooldown>0){
+  globalCooldown=Math.max(
+   0,globalCooldown-dt/1000
+  );
  }
 
- // smooth steering
+ // Gerakan mobil halus
  playerX+=(lanes[lane]-playerX)*Math.min(1,dt/75);
 
- // pepohonan terus muncul
+ // Pohon di kedua sisi jalan
  for(let t of trees){
-   t.y+=currentSpeed*dt/16;
-   if(t.y>590){
-     t.y=-30;
-     t.x=Math.random()<.5?35:355;
-   }
+  t.y+=currentSpeed*step;
+
+  if(t.y>590){
+   t.y=-30;
+   t.x=Math.random()<.5?35:355;
+  }
  }
 
- // kendaraan lain
+ // Kendaraan lawan
  spawnTimer+=dt;
+
  if(spawnTimer>Math.max(450,1050-score*2)){
-   spawnObstacle();
-   spawnTimer=0;
+  spawnObstacle();
+  spawnTimer=0;
  }
 
  for(let o of obstacles){
-   o.y+=currentSpeed*dt/16;
+  o.y+=currentSpeed*step;
 
-   let close=Math.abs(o.y-455)<34 &&
-             Math.abs(o.x-playerX)<35;
+  const playerY=skills.fly>0?425:455;
+  const close=
+   Math.abs(o.y-playerY)<34 &&
+   Math.abs(o.x-playerX)<35;
 
-   if(close){
-     if(skills.mega>0){
-       o.y=700;
-       score+=5;
-     }else if(skills.fly<=0){
-       endGame();
-       return;
-     }
+  if(close){
+   if(skills.mega>0){
+    o.y=700;
+    score+=5;
+   }else if(skills.fly<=0){
+    endGame();
+    return;
    }
+  }
 
-   if(o.y>580&&!o.passed){
-     o.passed=true;
-     score++;
-   }
+  if(o.y>580&&!o.passed){
+   o.passed=true;
+   score++;
+  }
  }
 
  obstacles=obstacles.filter(o=>o.y<620);
 
  if(!slowActive){
-   speed=3+score*.035;
+  speed=3+score*.035;
  }
 
  document.getElementById("score").textContent=score;
  document.getElementById("speed").textContent=
-   (currentSpeed/3).toFixed(1)+"x";
+  (currentSpeed/3).toFixed(1)+"x";
 
  updateSkillButtons();
-}
-
-function updateSkillButtons(){
- const names=["mega","fly","slow"];
- names.forEach(name=>{
-   const b=document.getElementById(name);
-   b.disabled=skills[name]>0;
-   b.innerHTML=(
-     name==="mega"?"🚙 MEGA CAR":
-     name==="fly"?"✈️ FLY":"🐢 SLOW TIME"
-   )+"<br>"+(
-     skills[name]>0?
-     Math.ceil(skills[name])+" DETIK":
-     "SIAP"
-   );
- });
 }
 
 function draw(){
  drawRoad();
 
- // kendaraan musuh
  for(let o of obstacles){
-   drawCar(o.x,o.y,"#e64b42");
+  drawCar(o.x,o.y,"#e64b42");
  }
 
- // bayangan saat terbang
  if(skills.fly>0){
-   ctx.globalAlpha=.25;
-   drawCar(playerX,465,"#111");
-   ctx.globalAlpha=1;
+  ctx.globalAlpha=.25;
+  drawCar(playerX,465,"#111");
+  ctx.globalAlpha=1;
  }
 
- // mobil pemain
- let size=skills.mega>0?1.55:1;
-
- let playerY=skills.fly>0?425:455;
+ const size=skills.mega>0?1.55:1;
+ const playerY=skills.fly>0?425:455;
 
  drawCar(
-   playerX,
-   playerY,
-   skills.mega>0?"#ffb52e":"#168de0",
-   size
+  playerX,playerY,
+  skills.mega>0?"#ffb52e":"#168de0",
+  size
  );
 
- // efek terbang
  if(skills.fly>0){
-   ctx.fillStyle="white";
-   ctx.font="13px Arial";
-   ctx.fillText("✈ FLYING",playerX-30,playerY-35);
+  ctx.fillStyle="white";
+  ctx.font="bold 14px Arial";
+  ctx.fillText("FLYING",playerX-25,playerY-35);
  }
+
+ if(skills.mega>0){
+  ctx.fillStyle="#ffdb69";
+  ctx.font="bold 12px Arial";
+  ctx.fillText("MEGA",playerX-20,playerY-40);
+ }
+}
+
+function updateSkillButtons(){
+ const names=["mega","fly","slow"];
+ const labels={
+  mega:"🚙 MEGA CAR",
+  fly:"✈️ FLY",
+  slow:"🐢 SLOW TIME"
+ };
+
+ names.forEach(name=>{
+  const b=document.getElementById(name);
+
+  if(score<150){
+   b.disabled=true;
+   b.innerHTML=labels[name]+"<br>🔒 SCORE 150";
+  }
+  else if(activeSkill===name){
+   b.disabled=true;
+   b.innerHTML=labels[name]+"<br>AKTIF "+
+    Math.ceil(skills[name])+"s";
+  }
+  else if(activeSkill!==null){
+   b.disabled=true;
+   b.innerHTML=labels[name]+"<br>SKILL LAIN AKTIF";
+  }
+  else if(globalCooldown>0){
+   b.disabled=true;
+   b.innerHTML=labels[name]+"<br>COOLDOWN "+
+    Math.ceil(globalCooldown)+"s";
+  }
+  else{
+   b.disabled=false;
+   b.innerHTML=labels[name]+"<br>SIAP!";
+  }
+ });
 }
 
 function loop(time){
  if(!running)return;
 
- let dt=lastTime?Math.min(time-lastTime,40):16;
+ const dt=lastTime?Math.min(time-lastTime,40):16;
  lastTime=time;
 
  update(dt);
@@ -351,20 +404,22 @@ function endGame(){
 
  document.getElementById("message").textContent="GAME OVER!";
  document.getElementById("submessage").textContent=
-   "Skor kamu: "+score;
+  "Skor kamu: "+score;
 
  document.getElementById("overlay").style.display="flex";
+ updateSkillButtons();
 }
 
 document.addEventListener("keydown",e=>{
  if(e.key==="ArrowLeft"||e.key==="a")move(-1);
  if(e.key==="ArrowRight"||e.key==="d")move(1);
+
  if(e.key==="1")activateSkill("mega");
  if(e.key==="2")activateSkill("fly");
  if(e.key==="3")activateSkill("slow");
 });
 
-// kontrol geser layar
+// Kontrol swipe layar
 let touchStart=null;
 
 canvas.addEventListener("touchstart",e=>{
@@ -373,11 +428,17 @@ canvas.addEventListener("touchstart",e=>{
 
 canvas.addEventListener("touchend",e=>{
  if(touchStart===null)return;
- let delta=e.changedTouches[0].clientX-touchStart;
- if(Math.abs(delta)>25)move(delta>0?1:-1);
+
+ const delta=e.changedTouches[0].clientX-touchStart;
+
+ if(Math.abs(delta)>25){
+  move(delta>0?1:-1);
+ }
+
  touchStart=null;
 },{passive:true});
+
+updateSkillButtons();
 </script>
 </body>
-  </html>
-                 
+</html>
