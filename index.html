@@ -1,0 +1,675 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIGHWAY RUSH</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#10151d;color:white;
+ font-family:Arial,sans-serif;text-align:center;
+ overflow-x:hidden;
+}
+h1{color:#42caff;letter-spacing:3px}
+button{
+ border:0;border-radius:12px;padding:14px;
+ color:white;background:#167fc0;
+ font-weight:bold;font-size:14px;
+ cursor:pointer;
+ transition:transform .2s,opacity .2s;
+}
+button:active{transform:scale(.94)}
+button:disabled{opacity:.35}
+.hidden{display:none!important}
+
+/* INTRO */
+#intro{
+ position:fixed;inset:0;background:#080d16;
+ display:flex;align-items:center;justify-content:center;
+ z-index:20;flex-direction:column;
+}
+#introText{
+ font-size:clamp(28px,9vw,48px);
+ font-weight:900;letter-spacing:3px;
+ color:#42caff;
+}
+.letter{
+ display:inline-block;
+ opacity:0;transform:translateY(20px);
+ animation:letterIn .45s forwards;
+}
+@keyframes letterIn{
+ to{opacity:1;transform:translateY(0)}
+}
+#introSub{
+ margin-top:15px;color:#aaa;
+ opacity:0;animation:fadeIn 1s 1.7s forwards;
+}
+@keyframes fadeIn{to{opacity:1}}
+
+/* MENU */
+#menu{
+ min-height:100vh;padding:35px 20px;
+ display:flex;flex-direction:column;
+ align-items:center;justify-content:center;
+ background:
+ radial-gradient(circle at 50% 20%,#17466b,#10151d 65%);
+}
+.menu-title{
+ font-size:36px;font-weight:900;
+ color:#45caff;text-shadow:0 0 20px #168fcf;
+ animation:titlePulse 2s infinite alternate;
+}
+@keyframes titlePulse{
+ to{text-shadow:0 0 30px #28baff}
+}
+.menu-buttons{
+ display:flex;flex-direction:column;
+ width:min(85%,300px);gap:12px;margin-top:35px;
+}
+.menu-buttons button{
+ opacity:0;animation:menuIn .5s forwards;
+}
+.menu-buttons button:nth-child(1){animation-delay:.2s}
+.menu-buttons button:nth-child(2){animation-delay:.4s}
+.menu-buttons button:nth-child(3){animation-delay:.6s}
+@keyframes menuIn{
+ from{opacity:0;transform:translateY(25px)}
+ to{opacity:1;transform:translateY(0)}
+}
+
+/* SCREEN TRANSITION */
+.screen{
+ animation:screenIn .4s ease;
+}
+@keyframes screenIn{
+ from{opacity:0;transform:translateY(15px)}
+ to{opacity:1;transform:translateY(0)}
+}
+
+/* GAME */
+.hud{
+ display:flex;justify-content:space-around;
+ padding:10px;font-size:13px;font-weight:bold;
+}
+#game{
+ width:min(100%,420px);height:auto;
+ display:block;margin:auto;
+ border:3px solid #46505b;border-radius:12px;
+ background:#315d30;
+ touch-action:pan-y;
+}
+.skills{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:7px;max-width:420px;margin:12px auto;
+ padding:0 5px;
+}
+.skills button{font-size:11px;padding:12px 3px}
+.controls{
+ display:flex;justify-content:center;
+ gap:25px;margin:12px;
+}
+.controls button{width:110px;font-size:18px}
+#gameScreen{padding-bottom:20px}
+
+/* OTHER PANELS */
+.panel{
+ width:min(88%,350px);
+ background:#202b3a;padding:25px;
+ border-radius:18px;margin:auto;
+ box-shadow:0 10px 35px #0007;
+}
+.panel button{width:100%;margin-top:12px}
+.small{font-size:12px;color:#aab6c5}
+#flash{
+ position:fixed;inset:0;background:white;
+ opacity:0;pointer-events:none;z-index:30;
+}
+#finishScreen{
+ position:fixed;inset:0;z-index:25;
+ background:#080b14;
+ display:flex;align-items:center;justify-content:center;
+ flex-direction:column;padding:20px;
+}
+#finishTitle{
+ font-size:35px;color:#ffcf48;
+ animation:titlePulse .5s infinite alternate;
+}
+#finishSurprise{
+ font-size:70px;margin:15px;
+ animation:surprise .5s infinite alternate;
+}
+@keyframes surprise{
+ from{transform:scale(.85)}
+ to{transform:scale(1.15)}
+}
+</style>
+</head>
+
+<body>
+
+<div id="intro">
+ <div id="introText"></div>
+ <div id="introSub">PRESENTS HIGHWAY RUSH</div>
+</div>
+
+<!-- MAIN MENU -->
+<section id="menu" class="hidden screen">
+ <div class="menu-title">HIGHWAY RUSH</div>
+ <p class="small">ENDLESS HIGHWAY CHALLENGE</p>
+
+ <div class="menu-buttons">
+  <button onclick="openGame()">🚗 PLAY</button>
+  <button onclick="openHighScore()">🏆 HIGH SCORE</button>
+  <button onclick="openSettings()">⚙ SETTINGS</button>
+ </div>
+
+ <p class="small" style="margin-top:45px">CREATED BY ADIT ®</p>
+</section>
+
+<!-- HIGH SCORE -->
+<section id="highScoreScreen" class="hidden screen">
+ <div class="panel" style="margin-top:30vh">
+  <h2>🏆 HIGH SCORE</h2>
+  <h1 id="bestDisplay">0</h1>
+  <p class="small">Rekor tertinggi di perangkat ini</p>
+  <button onclick="backMenu()">KEMBALI</button>
+ </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settingsScreen" class="hidden screen">
+ <div class="panel" style="margin-top:20vh">
+  <h2>⚙ SETTINGS</h2>
+  <p>Efek suara</p>
+  <button id="soundButton" onclick="toggleSound()">SOUND: ON</button>
+  <p class="small">Pengaturan tersimpan di perangkat.</p>
+  <button onclick="backMenu()">KEMBALI</button>
+ </div>
+</section>
+
+<!-- GAME -->
+<section id="gameScreen" class="hidden screen">
+ <h1>HIGHWAY RUSH</h1>
+
+ <div class="hud">
+  <span>🏆 <b id="score">0</b></span>
+  <span>🥇 <b id="best">0</b></span>
+  <span>⚡ <b id="speed">1x</b></span>
+ </div>
+
+ <canvas id="game" width="390" height="560"></canvas>
+
+ <div class="skills">
+  <button id="mega" onclick="activateSkill('mega')">🚙 MEGA<br>LOCKED</button>
+  <button id="fly" onclick="activateSkill('fly')">✈️ FLY<br>LOCKED</button>
+  <button id="slow" onclick="activateSkill('slow')">🐢 SLOW<br>LOCKED</button>
+ </div>
+
+ <p class="small">Skill terbuka pada skor 150 • Cooldown 90 detik</p>
+
+ <div class="controls">
+  <button onclick="move(-1)">⬅ KIRI</button>
+  <button onclick="move(1)">KANAN ➡</button>
+ </div>
+</section>
+
+<!-- GAME OVER -->
+<section id="gameOverScreen" class="hidden screen">
+ <div class="panel" style="margin-top:25vh">
+  <h1>GAME OVER</h1>
+  <h2>Skor: <span id="finalScore">0</span></h2>
+  <p>Rekor: <b id="finalBest">0</b></p>
+  <button onclick="openGame()">MAIN LAGI</button>
+  <button onclick="backMenu()">MENU UTAMA</button>
+ </div>
+</section>
+
+<!-- FINISH -->
+<section id="finishScreen" class="hidden">
+ <div id="finishTitle">YOU FINISHED!</div>
+ <div id="finishSurprise">😈</div>
+ <h2>1.000 SCORE!</h2>
+ <p>Kamu berhasil menyelesaikan HIGHWAY RUSH!</p>
+ <button onclick="backMenu()">KEMBALI KE MENU</button>
+</section>
+
+<div id="flash"></div>
+
+<script>
+/* INTRO LETTER ANIMATION */
+const introText="ADIT ®";
+const introElement=document.getElementById("introText");
+
+introText.split("").forEach((letter,i)=>{
+ const span=document.createElement("span");
+ span.className="letter";
+ span.textContent=letter===" "?"\u00a0":letter;
+ span.style.animationDelay=(i*.25)+"s";
+ introElement.appendChild(span);
+});
+
+setTimeout(()=>{
+ document.getElementById("intro").classList.add("hidden");
+ showScreen("menu");
+},2800);
+
+/* SCREEN SYSTEM */
+const screens=[
+ "menu","highScoreScreen","settingsScreen",
+ "gameScreen","gameOverScreen"
+];
+
+function showScreen(id){
+ screens.forEach(s=>{
+  document.getElementById(s).classList.add("hidden");
+ });
+ const el=document.getElementById(id);
+ el.classList.remove("hidden");
+ el.classList.remove("screen");
+ void el.offsetWidth;
+ el.classList.add("screen");
+}
+
+function backMenu(){
+ running=false;
+ showScreen("menu");
+}
+
+function openHighScore(){
+ document.getElementById("bestDisplay").textContent=bestScore;
+ showScreen("highScoreScreen");
+}
+
+function openSettings(){
+ showScreen("settingsScreen");
+}
+
+/* SOUND */
+let soundOn=localStorage.getItem("hrSound")!=="off";
+
+function toggleSound(){
+ soundOn=!soundOn;
+ localStorage.setItem("hrSound",soundOn?"on":"off");
+ updateSoundButton();
+}
+
+function updateSoundButton(){
+ document.getElementById("soundButton").textContent=
+  "SOUND: "+(soundOn?"ON":"OFF");
+}
+updateSoundButton();
+
+/* SIMPLE ORIGINAL SOUND EFFECT */
+let audioContext=null;
+
+function playBeep(freq=440,duration=.12){
+ if(!soundOn)return;
+ try{
+  audioContext=audioContext||new (window.AudioContext||window.webkitAudioContext)();
+  if(audioContext.state==="suspended")audioContext.resume();
+  const osc=audioContext.createOscillator();
+  const gain=audioContext.createGain();
+  osc.frequency.value=freq;
+  gain.gain.setValueAtTime(.06,audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);
+  osc.connect(gain);
+  gain.connect(audioContext.destination);
+  osc.start();
+  osc.stop(audioContext.currentTime+duration);
+ }catch(e){}
+}
+
+/* GAME DATA */
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+const lanes=[105,195,285];
+
+let lane=1;
+let playerX=195;
+let obstacles=[];
+let trees=[];
+let tireMarks=[];
+let score=0;
+let bestScore=Number(localStorage.getItem("hrBest")||0);
+let speed=3;
+let running=false;
+let lastTime=0;
+let roadOffset=0;
+let spawnTimer=0;
+let activeSkill=null;
+let globalCooldown=0;
+
+const duration={mega:50,fly:40,slow:60};
+let skills={mega:0,fly:0,slow:0};
+
+document.getElementById("best").textContent=bestScore;
+
+function openGame(){
+ score=0;
+ speed=3;
+ lane=1;
+ playerX=195;
+ obstacles=[];
+ tireMarks=[];
+ trees=[];
+ skills={mega:0,fly:0,slow:0};
+ activeSkill=null;
+ globalCooldown=0;
+ roadOffset=0;
+ spawnTimer=0;
+ lastTime=0;
+
+ for(let i=0;i<16;i++){
+  trees.push({x:Math.random()<.5?35:355,y:i*40});
+ }
+
+ running=true;
+ showScreen("gameScreen");
+ updateSkillButtons();
+ requestAnimationFrame(loop);
+}
+
+function move(d){
+ if(!running)return;
+ const oldLane=lane;
+ lane=Math.max(0,Math.min(2,lane+d));
+
+ if(oldLane!==lane){
+  tireMarks.push({
+   x:playerX,y:455,life:1
+  });
+  playBeep(250,.06);
+ }
+}
+
+function activateSkill(name){
+ if(!running||score<150||activeSkill!==null||globalCooldown>0)return;
+
+ activeSkill=name;
+ skills[name]=duration[name];
+ playBeep(700,.2);
+ updateSkillButtons();
+}
+
+/* DRAWING */
+function drawCar(x,y,color,scale=1){
+ ctx.save();
+ ctx.translate(x,y);
+ ctx.scale(scale,scale);
+
+ ctx.fillStyle="#111";
+ ctx.fillRect(-15,-20,30,42);
+ ctx.fillStyle=color;
+ ctx.fillRect(-12,-24,24,43);
+ ctx.fillStyle="#9deaff";
+ ctx.fillRect(-9,-16,18,10);
+ ctx.fillStyle="#222";
+ ctx.fillRect(-15,-15,5,12);
+ ctx.fillRect(10,-15,5,12);
+ ctx.fillStyle="#fff";
+ ctx.fillRect(-9,15,5,4);
+ ctx.fillRect(4,15,5,4);
+
+ ctx.restore();
+}
+
+function drawTree(x,y){
+ ctx.fillStyle="#75421d";
+ ctx.fillRect(x-4,y+5,8,19);
+ ctx.fillStyle="#126b2c";
+ ctx.beginPath();
+ ctx.arc(x,y,15,0,Math.PI*2);
+ ctx.fill();
+ ctx.fillStyle="#218b37";
+ ctx.beginPath();
+ ctx.arc(x-6,y-5,10,0,Math.PI*2);
+ ctx.fill();
+}
+
+function drawRoad(){
+ ctx.fillStyle="#35733a";
+ ctx.fillRect(0,0,390,560);
+
+ trees.forEach(t=>drawTree(t.x,t.y));
+
+ ctx.fillStyle="#34383d";
+ ctx.fillRect(60,0,270,560);
+
+ ctx.fillStyle="#eee";
+ ctx.fillRect(60,0,5,560);
+ ctx.fillRect(325,0,5,560);
+
+ ctx.fillStyle="#eee";
+ for(let y=-80;y<600;y+=80){
+  ctx.fillRect(148,y+roadOffset,4,40);
+  ctx.fillRect(238,y+roadOffset,4,40);
+ }
+
+ // Bekas ban
+ tireMarks.forEach(mark=>{
+  ctx.globalAlpha=mark.life*.55;
+  ctx.fillStyle="#151515";
+  ctx.fillRect(mark.x-12,mark.y,3,25);
+  ctx.fillRect(mark.x+9,mark.y,3,25);
+  ctx.globalAlpha=1;
+ });
+}
+
+/* UPDATE */
+function spawnObstacle(){
+ const l=Math.floor(Math.random()*3);
+ obstacles.push({x:lanes[l],y:-50,passed:false});
+}
+
+function update(dt){
+ const step=dt/16;
+ const slowActive=skills.slow>0;
+ const currentSpeed=slowActive?3:speed;
+
+ roadOffset=(roadOffset+currentSpeed*step)%80;
+
+ // Skill countdown and shared cooldown
+ if(activeSkill!==null){
+  skills[activeSkill]=Math.max(0,skills[activeSkill]-dt/1000);
+  if(skills[activeSkill]===0){
+   activeSkill=null;
+   globalCooldown=90;
+  }
+ }else if(globalCooldown>0){
+  globalCooldown=Math.max(0,globalCooldown-dt/1000);
+ }
+
+ playerX+=(lanes[lane]-playerX)*Math.min(1,dt/75);
+
+ trees.forEach(t=>{
+  t.y+=currentSpeed*step;
+  if(t.y>590){
+   t.y=-30;
+   t.x=Math.random()<.5?35:355;
+  }
+ });
+
+ tireMarks.forEach(m=>{
+  m.y+=currentSpeed*step;
+  m.life-=dt/5000;
+ });
+ tireMarks=tireMarks.filter(m=>m.life>0);
+
+ spawnTimer+=dt;
+ if(spawnTimer>Math.max(450,1050-score*2)){
+  spawnObstacle();
+  spawnTimer=0;
+ }
+
+ const playerY=skills.fly>0?425:455;
+
+ for(const o of obstacles){
+  o.y+=currentSpeed*step;
+  const close=Math.abs(o.y-playerY)<34&&Math.abs(o.x-playerX)<35;
+
+  if(close){
+   if(skills.mega>0){
+    o.y=700;
+    score+=5;
+   }else if(skills.fly<=0){
+    endGame();
+    return;
+   }
+  }
+
+  if(o.y>580&&!o.passed){
+   o.passed=true;
+   score++;
+  }
+ }
+
+ obstacles=obstacles.filter(o=>o.y<620);
+
+ if(!slowActive)speed=3+score*.035;
+
+ document.getElementById("score").textContent=score;
+ document.getElementById("speed").textContent=(currentSpeed/3).toFixed(1)+"x";
+
+ updateSkillButtons();
+
+ if(score>=1000){
+  finishGame();
+  return;
+ }
+}
+
+function draw(){
+ drawRoad();
+
+ obstacles.forEach(o=>drawCar(o.x,o.y,"#e64b42"));
+
+ if(skills.fly>0){
+  ctx.globalAlpha=.25;
+  drawCar(playerX,465,"#111");
+  ctx.globalAlpha=1;
+ }
+
+ const size=skills.mega>0?1.55:1;
+ const playerY=skills.fly>0?425:455;
+
+ drawCar(playerX,playerY,skills.mega>0?"#ffb52e":"#168de0",size);
+
+ if(skills.fly>0){
+  ctx.fillStyle="white";
+  ctx.font="bold 14px Arial";
+  ctx.fillText("FLYING",playerX-25,playerY-35);
+ }
+ if(skills.mega>0){
+  ctx.fillStyle="#ffdb69";
+  ctx.font="bold 12px Arial";
+  ctx.fillText("MEGA",playerX-20,playerY-40);
+ }
+}
+
+function updateSkillButtons(){
+ const names=["mega","fly","slow"];
+ const labels={
+  mega:"🚙 MEGA CAR",
+  fly:"✈️ FLY",
+  slow:"🐢 SLOW TIME"
+ };
+
+ names.forEach(name=>{
+  const b=document.getElementById(name);
+
+  if(score<150){
+   b.disabled=true;
+   b.innerHTML=labels[name]+"<br>🔒 SCORE 150";
+  }else if(activeSkill===name){
+   b.disabled=true;
+   b.innerHTML=labels[name]+"<br>AKTIF "+Math.ceil(skills[name])+"s";
+  }else if(activeSkill!==null){
+   b.disabled=true;
+   b.innerHTML=labels[name]+"<br>SKILL LAIN AKTIF";
+  }else if(globalCooldown>0){
+   b.disabled=true;
+   b.innerHTML=labels[name]+"<br>COOLDOWN "+Math.ceil(globalCooldown)+"s";
+  }else{
+   b.disabled=false;
+   b.innerHTML=labels[name]+"<br>SIAP!";
+  }
+ });
+}
+
+/* GAME LOOP */
+function loop(time){
+ if(!running)return;
+ const dt=lastTime?Math.min(time-lastTime,40):16;
+ lastTime=time;
+
+ update(dt);
+ if(!running)return;
+
+ draw();
+ requestAnimationFrame(loop);
+}
+
+/* GAME OVER */
+function saveBest(){
+ if(score>bestScore){
+  bestScore=score;
+  localStorage.setItem("hrBest",String(bestScore));
+ }
+ document.getElementById("best").textContent=bestScore;
+}
+
+function endGame(){
+ running=false;
+ saveBest();
+ playBeep(150,.5);
+
+ document.getElementById("finalScore").textContent=score;
+ document.getElementById("finalBest").textContent=bestScore;
+ showScreen("gameOverScreen");
+}
+
+/* FINISH */
+function finishGame(){
+ running=false;
+ score=1000;
+ saveBest();
+ playBeep(900,.4);
+
+ document.getElementById("finishScreen").classList.remove("hidden");
+
+ const flash=document.getElementById("flash");
+ flash.style.opacity="1";
+ setTimeout(()=>flash.style.opacity="0",120);
+}
+
+/* KEYBOARD */
+document.addEventListener("keydown",e=>{
+ if(e.key==="ArrowLeft"||e.key==="a")move(-1);
+ if(e.key==="ArrowRight"||e.key==="d")move(1);
+ if(e.key==="1")activateSkill("mega");
+ if(e.key==="2")activateSkill("fly");
+ if(e.key==="3")activateSkill("slow");
+});
+
+/* SWIPE */
+let touchStart=null;
+canvas.addEventListener("touchstart",e=>{
+ touchStart=e.touches[0].clientX;
+},{passive:true});
+
+canvas.addEventListener("touchend",e=>{
+ if(touchStart===null)return;
+ const delta=e.changedTouches[0].clientX-touchStart;
+ if(Math.abs(delta)>25)move(delta>0?1:-1);
+ touchStart=null;
+},{passive:true});
+
+updateSkillButtons();
+</script>
+</body>
+  </html>
+
