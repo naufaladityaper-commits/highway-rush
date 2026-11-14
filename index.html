@@ -3,29 +3,21 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#080b12">
 <title>HIGHWAY RUSH</title>
 
 <style>
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 
-:root {
-  --orange: #ff8500;
-  --yellow: #ffc04a;
-  --dark: #080b10;
-  --panel: #111923;
-  --muted: #8b99a9;
-}
-
 body {
-  background: var(--dark);
+  margin: 0;
+  background: #080b12;
   color: white;
+  font-family: Arial, sans-serif;
   overflow: hidden;
   user-select: none;
 }
@@ -33,457 +25,369 @@ body {
 button {
   border: 0;
   color: white;
+  font-weight: bold;
+  font-size: 15px;
   cursor: pointer;
-  font-weight: 900;
+  touch-action: manipulation;
 }
-
-.hidden { display: none !important; }
 
 .screen {
   position: fixed;
   inset: 0;
-  z-index: 5;
+  display: none;
+  overflow: hidden;
+}
+
+.screen.active {
   display: flex;
+}
+
+#introScreen {
+  background:
+    radial-gradient(circle at center, #202b3e 0%, #080b12 65%);
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 40%, #263342 0%, #101720 45%, #05070a 100%);
-  animation: screenIn .35s ease;
+  z-index: 20;
 }
 
-@keyframes screenIn {
-  from { opacity: 0; transform: scale(1.025); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.orange { color: var(--orange); }
-
-/* BACKGROUND DECORATION */
-
-.city {
-  position: absolute;
-  inset: 0;
-  opacity: .35;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-around;
-  pointer-events: none;
-}
-
-.building {
-  width: 13%;
-  height: 28%;
-  background: linear-gradient(#273442, #111820);
-  border-top: 2px solid #536071;
-  position: relative;
-}
-
-.building:nth-child(2) { height: 43%; }
-.building:nth-child(3) { height: 34%; }
-.building:nth-child(4) { height: 52%; }
-.building:nth-child(5) { height: 31%; }
-.building:nth-child(6) { height: 40%; }
-
-.building::after {
-  content: "";
-  position: absolute;
-  inset: 12px 8px;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0 10px,
-    #ff9a28 11px 14px,
-    transparent 15px 25px
-  );
-  opacity: .5;
-}
-
-.decor-road {
-  position: absolute;
-  bottom: -25%;
-  left: 50%;
-  width: 65%;
-  height: 65%;
-  transform: translateX(-50%) perspective(180px) rotateX(28deg);
-  background: #171d24;
-  border-left: 3px solid #ff8500;
-  border-right: 3px solid #ff8500;
-  opacity: .65;
-}
-
-.decor-road::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  height: 100%;
-  border-left: 4px dashed #aeb5bd;
-}
-
-.menu-content {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.logo {
-  font-size: clamp(37px, 10vw, 66px);
-  font-weight: 1000;
-  font-style: italic;
-  letter-spacing: -3px;
-  text-shadow: 0 5px 0 #713500, 0 0 30px #ff850055;
-}
-
-.logo span { color: var(--orange); }
-
-.logo-line {
-  width: 170px;
-  height: 4px;
-  margin-top: 9px;
-  background: linear-gradient(90deg, transparent, var(--orange), transparent);
-}
-
-.tagline {
-  color: #a5b1bd;
-  font-size: 10px;
-  letter-spacing: 5px;
-  margin-top: 12px;
-  margin-bottom: 42px;
-}
-
-.menu-buttons {
-  width: min(82%, 340px);
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-
-.btn-main {
-  background: linear-gradient(110deg, #ffae27, #ff7100);
-  color: #15100a;
-  padding: 18px;
-  border-radius: 7px;
-  font-size: 16px;
-  letter-spacing: 3px;
-  box-shadow: 0 5px 0 #984600, 0 0 25px #ff850033;
-  transition: .15s;
-}
-
-.btn-main:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 #984600;
-}
-
-.btn-secondary {
-  background: #151e29eF;
-  border: 1px solid #394858;
-  border-radius: 7px;
-  padding: 15px;
-  letter-spacing: 2px;
-  font-size: 12px;
-}
-
-.btn-secondary:active { background: #293747; }
-
-.version {
-  position: absolute;
-  bottom: 22px;
-  color: #718091;
-  font-size: 9px;
-  letter-spacing: 3px;
-}
-
-/* INTRO */
-
-#introScreen {
-  z-index: 30;
-  background: #05070a;
-}
-
-.intro-name {
-  font-size: clamp(40px, 11vw, 68px);
-  color: var(--orange);
+.intro-title {
+  font-size: clamp(38px, 12vw, 65px);
   font-weight: 1000;
   letter-spacing: 5px;
-  text-shadow: 0 0 30px #ff8500;
+  color: white;
+  text-shadow: 0 0 25px #ff6b22;
 }
 
-.intro-name span {
+.intro-title span {
   display: inline-block;
   opacity: 0;
-  transform: translateY(25px);
-  animation: letter .45s forwards;
+  animation: letterIn .35s forwards;
 }
 
-@keyframes letter {
-  to { opacity: 1; transform: translateY(0); }
+@keyframes letterIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(.7);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.intro-caption {
-  color: #718091;
-  font-size: 10px;
-  letter-spacing: 6px;
-  margin-top: 17px;
+.presents {
+  margin-top: 15px;
+  color: #ff792d;
+  letter-spacing: 8px;
+  font-size: 15px;
+  opacity: 0;
+  animation: presentIn 1s forwards;
+  animation-delay: 1.3s;
 }
 
-.loading-line {
-  width: 150px;
-  height: 3px;
-  background: #28313b;
+@keyframes presentIn {
+  from { opacity: 0; letter-spacing: 15px; }
+  to { opacity: 1; letter-spacing: 8px; }
+}
+
+.loading {
+  width: 190px;
+  height: 4px;
+  background: #252b37;
   margin-top: 35px;
+  border-radius: 10px;
   overflow: hidden;
 }
 
-.loading-line::after {
-  content: "";
-  display: block;
+.loading div {
   height: 100%;
-  width: 100%;
-  background: var(--orange);
-  transform: translateX(-100%);
-  animation: loading 2s ease forwards;
+  width: 0;
+  background: #ff762c;
+  animation: loading 2.5s linear forwards;
 }
 
 @keyframes loading {
-  to { transform: translateX(0); }
+  to { width: 100%; }
 }
 
-/* PANELS */
+#menuScreen {
+  background:
+    linear-gradient(180deg, rgba(5,8,14,.45), #080b12 95%),
+    radial-gradient(circle at 50% 25%, #34465b, #080b12 70%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.menu-road {
+  position: absolute;
+  width: 190px;
+  height: 120%;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #171d27;
+  border-left: 5px solid #ff762c;
+  border-right: 5px solid #ff762c;
+  opacity: .45;
+}
+
+.menu-road::before,
+.menu-road::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 5px;
+  top: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    white 0 45px,
+    transparent 45px 90px
+  );
+}
+
+.menu-road::before { left: 33%; }
+.menu-road::after { right: 33%; }
+
+.menu-content {
+  z-index: 2;
+  width: min(100%, 340px);
+  text-align: center;
+}
+
+.logo {
+  font-size: clamp(35px, 10vw, 55px);
+  font-weight: 1000;
+  font-style: italic;
+  line-height: .95;
+  text-shadow: 4px 4px 0 #a83c0d;
+}
+
+.logo span {
+  color: #ff792d;
+}
+
+.subtitle {
+  color: #aeb9c9;
+  font-size: 11px;
+  letter-spacing: 5px;
+  margin: 14px 0 40px;
+}
+
+.menu-btn {
+  display: block;
+  width: 100%;
+  padding: 17px;
+  margin: 12px 0;
+  border-radius: 9px;
+  background: #202b3b;
+  border: 1px solid #3d4b60;
+  transition: .15s;
+}
+
+.menu-btn:active {
+  transform: scale(.96);
+}
+
+.menu-btn.primary {
+  background: #ff7027;
+  border-color: #ff9a5f;
+  box-shadow: 0 5px 25px #ff702744;
+}
+
+.menu-footer {
+  color: #657185;
+  font-size: 10px;
+  margin-top: 35px;
+  letter-spacing: 2px;
+}
+
+#highScoreScreen,
+#settingsScreen,
+#pauseScreen,
+#gameOverScreen,
+#finishScreen {
+  background: rgba(5,8,14,.96);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 25px;
+  z-index: 10;
+  text-align: center;
+}
 
 .panel {
-  width: min(88%, 370px);
-  padding: 26px 22px;
-  background: linear-gradient(145deg, #1a2633, #0c121a);
-  border: 1px solid #465567;
-  border-top: 3px solid var(--orange);
-  border-radius: 12px;
-  box-shadow: 0 20px 60px #0009;
-  text-align: center;
-  z-index: 2;
+  width: min(100%, 340px);
+  padding: 28px 22px;
+  border-radius: 16px;
+  background: #141c29;
+  border: 1px solid #35445a;
 }
 
-.panel h2 {
-  color: var(--orange);
-  letter-spacing: 3px;
-  margin-bottom: 22px;
-  font-size: 22px;
-}
-
-.panel p {
-  color: #b3bfcb;
-  margin: 14px 0;
-  font-size: 13px;
-}
-
-.panel button {
-  width: 100%;
-  margin-top: 12px;
-}
-
-.score-label {
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: var(--muted);
+.panel h1 {
+  color: #ff792d;
+  font-size: 27px;
+  margin-top: 0;
 }
 
 .big-score {
-  color: var(--orange);
-  font-size: 52px;
+  font-size: 48px;
   font-weight: 1000;
-  margin: 10px 0 20px;
-  text-shadow: 0 0 25px #ff850044;
+  margin: 20px 0;
 }
 
-/* GAME */
+.small-text {
+  color: #9ba8ba;
+  font-size: 13px;
+  line-height: 1.6;
+}
 
 #gameScreen {
-  z-index: 2;
-  background: #101710;
+  background: #101722;
+  flex-direction: column;
 }
 
 #gameCanvas {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
+  display: block;
 }
 
 .hud {
   position: absolute;
-  z-index: 3;
-  top: 0;
-  width: 100%;
-  padding: 15px;
+  top: 12px;
+  left: 12px;
+  right: 12px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   pointer-events: none;
+  z-index: 2;
 }
 
-.hud-card {
-  min-width: 85px;
+.hud-box {
+  background: #080b12cc;
+  border: 1px solid #ffffff22;
+  border-radius: 9px;
   padding: 9px 12px;
-  border: 1px solid #586575;
-  border-left: 3px solid var(--orange);
-  border-radius: 6px;
-  background: #0b111bdc;
-  box-shadow: 0 5px 20px #0005;
+  min-width: 90px;
 }
 
-.hud-title {
-  color: #9ca9b7;
+.hud-label {
+  color: #a5b1c2;
   font-size: 9px;
   letter-spacing: 2px;
 }
 
-.hud-number {
-  color: var(--orange);
-  font-size: 23px;
-  font-weight: 1000;
-  margin-top: 4px;
+.hud-value {
+  font-size: 21px;
+  font-weight: 900;
+  margin-top: 3px;
 }
 
-.pause-btn {
+#pauseButton {
   pointer-events: auto;
-  width: 44px;
-  height: 44px;
-  border-radius: 7px;
-  color: #15100a;
-  background: var(--orange);
-  font-size: 19px;
+  background: #182233dd;
+  border: 1px solid #ffffff33;
+  border-radius: 9px;
+  padding: 12px 15px;
 }
-
-.speed-bar {
-  position: absolute;
-  z-index: 3;
-  top: 79px;
-  left: 15px;
-  right: 15px;
-  height: 4px;
-  background: #ffffff33;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.speed-fill {
-  width: 0%;
-  height: 100%;
-  background: var(--orange);
-  box-shadow: 0 0 10px var(--orange);
-  transition: width .2s;
-}
-
-/* SKILLS */
 
 .skills {
   position: absolute;
-  z-index: 4;
-  bottom: 17px;
-  left: 0;
-  width: 100%;
+  top: 90px;
+  left: 10px;
+  right: 10px;
   display: flex;
   justify-content: center;
-  gap: 8px;
-  padding: 0 9px;
+  gap: 7px;
+  z-index: 3;
 }
 
 .skill-btn {
   flex: 1;
-  max-width: 118px;
-  min-height: 65px;
+  max-width: 115px;
+  min-height: 47px;
+  background: #121d2cdd;
+  border: 1px solid #53647a;
   border-radius: 8px;
-  border: 1px solid #526171;
-  background: #101923ed;
   font-size: 10px;
-  letter-spacing: 1px;
+  padding: 7px 3px;
 }
 
-.skill-btn strong {
-  display: block;
-  color: var(--orange);
-  font-size: 12px;
-  margin-bottom: 5px;
+.skill-btn:disabled {
+  opacity: .35;
 }
 
-.skill-btn small {
-  display: block;
-  color: #a2afbc;
-  font-size: 9px;
-  margin-top: 5px;
+.skill-btn.ready {
+  border-color: #ff792d;
+  color: #ff9b60;
 }
 
-.skill-btn:disabled { opacity: .35; }
-.skill-btn.active {
-  border-color: var(--orange);
-  box-shadow: 0 0 17px #ff850055;
+.skill-status {
+  position: absolute;
+  top: 148px;
+  width: 100%;
+  text-align: center;
+  color: #ffb27f;
+  font-size: 11px;
+  font-weight: bold;
+  z-index: 2;
+  text-shadow: 0 2px 4px black;
 }
-
-/* STEERING */
 
 .controls {
   position: absolute;
-  z-index: 3;
-  bottom: 100px;
-  width: 100%;
-  padding: 0 20px;
+  bottom: 22px;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
-  pointer-events: none;
+  padding: 0 25px;
+  z-index: 3;
 }
 
 .control-btn {
-  pointer-events: auto;
-  width: 62px;
-  height: 53px;
-  border-radius: 9px;
-  background: #101923df;
-  border: 1px solid #7b8998;
-  font-size: 23px;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #101b2bdc;
+  border: 2px solid #ffffff66;
+  font-size: 25px;
+  box-shadow: 0 5px 20px #0008;
 }
 
 .control-btn:active {
-  background: var(--orange);
-  color: #111;
+  background: #ff7027;
 }
 
-/* PAUSE / RESULTS */
-
-#pauseScreen, #gameOverScreen, #finishScreen {
-  z-index: 12;
-  background: #05080deF;
+#speedBar {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 115px;
+  height: 5px;
+  background: #ffffff33;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-#finishScreen {
-  background: radial-gradient(circle, #46280b, #090b10 75%);
+#speedFill {
+  height: 100%;
+  width: 20%;
+  background: #ff792d;
 }
 
-.finish-face {
-  font-size: 75px;
-  animation: bounce .5s infinite alternate;
+#finishScreen h1 {
+  font-size: 42px;
+  color: #ff792d;
 }
 
-@keyframes bounce {
-  to { transform: scale(1.1) rotate(5deg); }
-}
-
-.result-sub {
-  color: #a5b1bd;
-  font-size: 12px;
-  margin-top: 12px;
-}
-
-@media (max-height: 650px) {
-  .tagline { margin-bottom: 22px; }
-  .menu-buttons { gap: 9px; }
-  .btn-main { padding: 14px; }
-  .btn-secondary { padding: 12px; }
-  .skills { bottom: 9px; }
-  .skill-btn { min-height: 55px; }
-  .controls { bottom: 80px; }
+.hidden {
+  display: none !important;
 }
 </style>
 </head>
@@ -491,57 +395,558 @@ button {
 <body>
 
 <!-- INTRO -->
-<section id="introScreen" class="screen">
-  <div class="intro-name" id="introName"></div>
-  <div class="intro-caption">PRESENTS</div>
-  <div class="loading-line"></div>
+<section id="introScreen" class="screen active">
+  <div class="intro-title" id="introTitle"></div>
+  <div class="presents">P R E S E N T S</div>
+  <div class="loading"><div></div></div>
 </section>
 
-<!-- MAIN MENU -->
-<section id="menuScreen" class="screen hidden">
-  <div class="city">
-    <div class="building"></div>
-    <div class="building"></div>
-    <div class="building"></div>
-    <div class="building"></div>
-    <div class="building"></div>
-    <div class="building"></div>
-  </div>
-  <div class="decor-road"></div>
-
+<!-- MENU -->
+<section id="menuScreen" class="screen">
+  <div class="menu-road"></div>
   <div class="menu-content">
-    <div class="logo">HIGHWAY <span>RUSH</span></div>
-    <div class="logo-line"></div>
-    <div class="tagline">ENDLESS HIGHWAY EXPERIENCE</div>
+    <div class="logo">HIGHWAY<br><span>RUSH</span></div>
+    <div class="subtitle">ENDLESS ROAD EXPERIENCE</div>
 
-    <div class="menu-buttons">
-      <button class="btn-main" onclick="startGame()">▶ &nbsp; PLAY</button>
-      <button class="btn-secondary" onclick="showHighScore()">🏆 &nbsp; HIGH SCORE</button>
-      <button class="btn-secondary" onclick="showSettings()">⚙ &nbsp; SETTINGS</button>
-    </div>
+    <button class="menu-btn primary" id="playButton">▶ PLAY GAME</button>
+    <button class="menu-btn" id="scoreButton">🏆 HIGH SCORE</button>
+    <button class="menu-btn" id="settingsButton">⚙ SETTINGS</button>
+
+    <div class="menu-footer">ADIT ® ORIGINAL GAME</div>
   </div>
-
-  <div class="version">ADIT ® &nbsp; | &nbsp; VERSION 2.0</div>
 </section>
 
 <!-- HIGH SCORE -->
-<section id="highScoreScreen" class="screen hidden">
+<section id="highScoreScreen" class="screen">
   <div class="panel">
-    <h2>🏆 RECORD</h2>
-    <div class="score-label">BEST DISTANCE</div>
-    <div class="big-score" id="bestScore">0</div>
-    <button class="btn-main" onclick="showScreen('menuScreen')">BACK</button>
+    <h1>HIGH SCORE</h1>
+    <div class="big-score" id="bestScoreDisplay">0</div>
+    <div class="small-text">REKOR TERBAIK DI PERANGKAT INI</div>
+    <br>
+    <button class="menu-btn primary" id="scoreBackButton">BACK TO MENU</button>
   </div>
 </section>
 
 <!-- SETTINGS -->
-<section id="settingsScreen" class="screen hidden">
+<section id="settingsScreen" class="screen">
   <div class="panel">
-    <h2>⚙ SETTINGS</h2>
-    <p>Sound Effects</p>
-    <button class="btn-secondary" id="soundToggle" onclick="toggleSound()">SOUND: ON</button>
-    <p class="result-sub">Audio effects are generated locally.</p>
-    <button class="btn-main" onclick="showScreen('menuScreen')">BACK</button>
+    <h1>SETTINGS</h1>
+    <p class="small-text">AUDIO</p>
+    <button class="menu-btn" id="soundButton">SOUND: ON</button>
+    <button class="menu-btn" id="musicButton">MUSIC: ON</button>
+    <br>
+    <button class="menu-btn primary" id="settingsBackButton">BACK TO MENU</button>
+  </div>
+</section>
+
+<!-- GAME -->
+<section id="gameScreen" class="screen">
+  <canvas id="gameCanvas"></canvas>
+
+  <div class="hud">
+    <div class="hud-box">
+      <div class="hud-label">SCORE</div>
+      <div class="hud-value" id="scoreDisplay">0</div>
+    </div>
+
+    <button id="pauseButton">Ⅱ</button>
+
+    <div class="hud-box">
+      <div class="hud-label">SPEED</div>
+      <div class="hud-value" id="speedDisplay">1x</div>
+    </div>
+  </div>
+
+  <div class="skills">
+    <button class="skill-btn" id="megaSkill" disabled>🚘<br>MEGA CAR</button>
+    <button class="skill-btn" id="flySkill" disabled>✈️<br>FLY</button>
+    <button class="skill-btn" id="slowSkill" disabled>⏳<br>SLOW TIME</button>
+  </div>
+
+  <div class="skill-status" id="skillStatus">SKILL TERBUKA DI SKOR 150</div>
+
+  <div id="speedBar"><div id="speedFill"></div></div>
+
+  <div class="controls">
+    <button class="control-btn" id="leftButton">◀</button>
+    <button class="control-btn" id="rightButton">▶</button>
+  </div>
+</section>
+
+<!-- PAUSE -->
+<section id="pauseScreen" class="screen">
+  <div class="panel">
+    <h1>PAUSED</h1>
+    <p class="small-text">GAME SEDANG DIJEDA</p>
+    <button class="menu-btn primary" id="resumeButton">▶ RESUME</button>
+    <button class="menu-btn" id="restartPauseButton">↻ RESTART</button>
+    <button class="menu-btn" id="menuPauseButton">MAIN MENU</button>
+  </div>
+</section>
+
+<!-- GAME OVER -->
+<section id="gameOverScreen" class="screen">
+  <div class="panel">
+    <h1>GAME OVER</h1>
+    <div class="big-score" id="finalScore">0</div>
+    <p class="small-text">SKOR AKHIR</p>
+    <button class="menu-btn primary" id="retryButton">↻ TRY AGAIN</button>
+    <button class="menu-btn" id="menuOverButton">MAIN MENU</button>
+  </div>
+</section>
+
+<!-- FINISH -->
+<section id="finishScreen" class="screen">
+  <div class="panel">
+    <h1>🏁 FINISH!</h1>
+    <div class="big-score">1000</div>
+    <p class="small-text">KAMU BERHASIL MENYELESAIKAN HIGHWAY RUSH!</p>
+    <div style="font-size:55px;margin:15px">😎</div>
+    <button class="menu-btn primary" id="finishMenuButton">BACK TO MENU</button>
+  </div>
+</section>
+
+<script>
+"use strict";
+
+/* =========================
+   SCREEN SYSTEM
+========================= */
+
+const screens = document.querySelectorAll(".screen");
+
+function showScreen(id) {
+  screens.forEach(screen => screen.classList.remove("active"));
+  const target = document.getElementById(id);
+  if (target) target.classList.add("active");
+}
+
+/* =========================
+   INTRO SYSTEM
+========================= */
+
+const introText = "ADIT ®";
+const introTitle = document.getElementById("introTitle");
+
+introText.split("").forEach((letter, index) => {
+  const span = document.createElement("span");
+  span.textContent = letter === " " ? "\u00a0" : letter;
+  span.style.animationDelay = (index * 0.16) + "s";
+  introTitle.appendChild(span);
+});
+
+let introFinished = false;
+
+function finishIntro() {
+  if (introFinished) return;
+  introFinished = true;
+  showScreen("menuScreen");
+}
+
+setTimeout(finishIntro, 3800);
+
+/* =========================
+   AUDIO SYSTEM
+========================= */
+
+let audioContext = null;
+let soundEnabled = true;
+let musicEnabled = true;
+let musicTimer = null;
+let musicStep = 0;
+
+function initAudio() {
+  if (!audioContext) {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (AudioContextClass) {
+      audioContext = new AudioContextClass();
+    }
+  }
+
+  if (audioContext && audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+}
+
+function tone(frequency, duration, type = "sine", volume = 0.04) {
+  if (!soundEnabled || !audioContext) return;
+
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+
+  oscillator.type = type;
+  oscillator.frequency.value = frequency;
+
+  gain.gain.setValueAtTime(volume, audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    audioContext.currentTime + duration
+  );
+
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + duration);
+}
+
+function playSound(type) {
+  if (!soundEnabled) return;
+  initAudio();
+
+  switch (type) {
+    case "click":
+      tone(520, .08, "square", .025);
+      break;
+    case "start":
+      tone(330, .12);
+      setTimeout(() => tone(520, .16), 120);
+      break;
+    case "lane":
+      tone(260, .06, "sine", .02);
+      break;
+    case "skill":
+      tone(440, .12, "triangle");
+      setTimeout(() => tone(700, .18, "triangle"), 100);
+      break;
+    case "crash":
+      tone(110, .35, "sawtooth", .06);
+      break;
+    case "finish":
+      tone(440, .15);
+      setTimeout(() => tone(550, .15), 150);
+      setTimeout(() => tone(660, .3), 300);
+      break;
+    case "pause":
+      tone(220, .1);
+      break;
+  }
+}
+
+/* Musik sintetis original, tanpa file musik eksternal */
+const musicNotes = [220, 261, 329, 261, 196, 246, 293, 246];
+
+function startMusic() {
+  if (!musicEnabled || musicTimer) return;
+  initAudio();
+  if (!audioContext) return;
+
+  musicTimer = setInterval(() => {
+    if (!musicEnabled || !audioContext) return;
+    if (audioContext.state !== "running") return;
+
+    const note = musicNotes[musicStep % musicNotes.length];
+    musicStep++;
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = "triangle";
+    oscillator.frequency.value = note;
+    gain.gain.value = .018;
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      audioContext.currentTime + .25
+    );
+    oscillator.stop(audioContext.currentTime + .25);
+  }, 300);
+}
+
+function stopMusic() {
+  if (musicTimer) {
+    clearInterval(musicTimer);
+    musicTimer = null;
+  }
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+const soundButton = document.getElementById("soundButton");
+const musicButton = document.getElementById("musicButton");
+
+function updateSettings() {
+  soundButton.textContent = "SOUND: " + (soundEnabled ? "ON" : "OFF");
+  musicButton.textContent = "MUSIC: " + (musicEnabled ? "ON" : "OFF");
+}
+
+soundButton.addEventListener("click", () => {
+  soundEnabled = !soundEnabled;
+  updateSettings();
+  if (soundEnabled) playSound("click");
+});
+
+musicButton.addEventListener("click", () => {
+  musicEnabled = !musicEnabled;
+
+  if (musicEnabled) startMusic();
+  else stopMusic();
+
+  updateSettings();
+});
+
+/* =========================
+   HIGH SCORE
+========================= */
+
+let bestScore = Number(localStorage.getItem("hrBest") || 0);
+
+function updateBestScore() {
+  if (score > bestScore) {
+    bestScore = score;
+    localStorage.setItem("hrBest", String(bestScore));
+  }
+
+  document.getElementById("bestScoreDisplay").textContent = bestScore;
+}
+
+/* =========================
+   GAME VARIABLES
+========================= */
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let W = 0;
+let H = 0;
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  W = rect.width;
+  H = rect.height;
+
+  canvas.width = Math.floor(W * dpr);
+  canvas.height = Math.floor(H * dpr);
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+let running = false;
+let paused = false;
+let score = 0;
+let speed = 1;
+let roadOffset = 0;
+let spawnTimer = 0;
+let lastFrame = 0;
+let animationFrame = null;
+
+const lanes = [0, 1, 2];
+
+let player = {
+  lane: 1,
+  x: 0,
+  y: 0,
+  width: 39,
+  height: 68
+};
+
+let obstacles = [];
+let trees = [];
+let tireMarks = [];
+
+/* =========================
+   SKILL SYSTEM
+========================= */
+
+const SKILL_UNLOCK_SCORE = 150;
+const SKILL_COOLDOWN = 90;
+
+const skillInfo = {
+  mega: { duration: 50, label: "MEGA CAR" },
+  fly: { duration: 40, label: "FLY" },
+  slow: { duration: 60, label: "SLOW TIME" }
+};
+
+let activeSkill = null;
+let skillEndTime = 0;
+let cooldownEndTime = 0;
+
+const skillButtons = {
+  mega: document.getElementById("megaSkill"),
+  fly: document.getElementById("flySkill"),
+  slow: document.getElementById("slowSkill")
+};
+
+function activateSkill(type) {
+  if (!running || paused) return;
+  if (score < SKILL_UNLOCK_SCORE) return;
+  if (activeSkill) return;
+  if (Date.now() < cooldownEndTime) return;
+
+  activeSkill = type;
+  skillEndTime = Date.now() + skillInfo[type].duration * 1000;
+
+  playSound("skill");
+  updateSkillUI();
+}
+
+function endSkill() {
+  if (!activeSkill) return;
+
+  activeSkill = null;
+  cooldownEndTime = Date.now() + SKILL_COOLDOWN * 1000;
+  updateSkillUI();
+}
+
+function updateSkillUI() {
+  const status = document.getElementById("skillStatus");
+  const unlocked = score >= SKILL_UNLOCK_SCORE;
+  const cooling = Date.now() < cooldownEndTime;
+
+  Object.keys(skillButtons).forEach(type => {
+    const button = skillButtons[type];
+    const active = activeSkill === type;
+
+    button.disabled = !unlocked || !!activeSkill || cooling;
+    button.classList.toggle(
+      "ready",
+      unlocked && !activeSkill && !cooling
+    );
+
+    if (active) {
+      button.innerHTML =
+        skillInfo[type].label + "<br>ACTIVE";
+    } else {
+      const icons = {
+        mega: "🚘",
+        fly: "✈️",
+        slow: "⏳"
+      };
+
+      button.innerHTML =
+        icons[type] + "<br>" + skillInfo[type].label;
+    }
+  });
+
+  if (!unlocked) {
+    status.textContent =
+      "SKILL TERBUKA DI SKOR " + SKILL_UNLOCK_SCORE;
+  } else if (activeSkill) {
+    const remaining = Math.max(
+      0,
+      Math.ceil((skillEndTime - Date.now()) / 1000)
+    );
+    status.textContent =
+      skillInfo[activeSkill].label + " • " + remaining + "s";
+  } else if (cooling) {
+    const remaining = Math.ceil(
+      (cooldownEndTime - Date.now()) / 1000
+    );
+    status.textContent = "COOLDOWN • " + remaining + "s";
+  } else {
+    status.textContent = "SKILLS READY";
+  }
+}
+
+skillButtons.mega.addEventListener("click", () => activateSkill("mega"));
+skillButtons.fly.addEventListener("click", () => activateSkill("fly"));
+skillButtons.slow.addEventListener("click", () => activateSkill("slow"));
+
+/* =========================
+   ROAD AND DRAWING
+========================= */
+
+function roadBounds() {
+  const roadWidth = Math.min(W * .72, 420);
+  return {
+    left: (W - roadWidth) / 2,
+    width: roadWidth,
+    right: (W + roadWidth) / 2
+  };
+}
+
+function laneCenter(lane) {
+  const road = roadBounds();
+  return road.left + road.width * ((lane + .5) / 3);
+}
+
+function drawRoad(delta) {
+  const road = roadBounds();
+
+  ctx.fillStyle = "#15291d";
+  ctx.fillRect(0, 0, W, H);
+
+  // Road surface
+  ctx.fillStyle = "#282e38";
+  ctx.fillRect(road.left, 0, road.width, H);
+
+  // Road edges
+  ctx.fillStyle = "#ff762c";
+  ctx.fillRect(road.left - 4, 0, 4, H);
+  ctx.fillRect(road.right, 0, 4, H);
+
+  // Road lane markings
+  roadOffset += delta * speed * 0.32;
+
+  ctx.fillStyle = "#dce0e6";
+
+  for (let i = 1; i <= 2; i++) {
+    const x = road.left + road.width * i / 3;
+
+    for (let y = -70 + (roadOffset % 70); y < H; y += 70) {
+      ctx.fillRect(x - 2, y, 4, 35);
+    }
+  }
+
+  // Roadside grass stripes
+  ctx.fillStyle = "#1b3525";
+
+  for (let y = -40 + (roadOffset % 80); y < H; y += 80) {
+    ctx.fillRect(0, y, road.left - 5, 3);
+    ctx.fillRect(road.right + 5, y, W - road.right, 3);
+  }
+}
+
+function drawTree(x, y, size) {
+  ctx.fillStyle = "#50351f";
+  ctx.fillRect(x - size * .12, y, size * .24, size * .7);
+
+  ctx.fillStyle = "#1e6738";
+  ctx.beginPath();
+  ctx.arc(x, y, size * .48, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#2d8b49";
+  ctx.beginPath();
+  ctx.arc(x - size * .15, y - size * .12, size * .28, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawCar(x, y, width, height, color, isPlayer = false) {
+  ctx.save();
+  ctx.translate(x, y);
+
+  if (activeSkill === "mega" && isPlayer) {
+    ctx.scale(1.3, 1.3);
+  }
+
+  if (isPlayer && activeSkill === "fly") {
+    ctx.shadowColor = "#54d9ff";
+    ctx.shadowBlur = 20;
+    ctx.translate(0, -17);
+  }
+
+  // Car shadow
+  ctx.fillStyle = "#0008";
+  ctx.fillRect(-width / 2 + 3, -height / 2 + 5, width, height);
+
+  // Wheels
+  ctx.fillStyle = "#090b10";
+  ctx.fillRect(-width / 2 - 3, -height / 2 + 12, 6, 16);
+  ctx.fillRect(width / 2 - 3, -height / 2 + 12, 6, 16);
+ owScreen('menuScreen')">BACK</button>
   </div>
 </section>
 
