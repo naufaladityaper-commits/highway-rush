@@ -6,22 +6,16 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'index.html'
-      - '.github/workflows/build-apk.yml'
-
-permissions:
-  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -32,18 +26,16 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Prepare Android project
+      - name: Prepare Capacitor Project
         run: |
           npm init -y
-          npm install @capacitor/core@7 @capacitor/android@7
-          npm install --save-dev @capacitor/cli@7
-
+          npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
           mkdir -p www
           cp index.html www/index.html
 
           cat > capacitor.config.json <<'EOF'
           {
-            "appId": "com.highwayrush.game",
+            "appId": "com.adit.highwayrush",
             "appName": "HIGHWAY RUSH",
             "webDir": "www"
           }
@@ -58,9 +50,9 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Upload APK
+      - name: Upload HIGHWAY RUSH APK
         uses: actions/upload-artifact@v4
         with:
-          name: HIGHWAY-RUSH-APK
+          name: HIGHWAY-RUSH-BUILD-${{ github.run_number }}
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 7
+          if-no-files-found: error
