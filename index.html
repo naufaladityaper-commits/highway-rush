@@ -3,421 +3,989 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>HIGHWAY RUSH</title>
 
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#10151d;color:white;
- font-family:Arial,sans-serif;text-align:center;
- overflow-x:hidden;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
-h1{color:#42caff;letter-spacing:3px}
-button{
- border:0;border-radius:12px;padding:14px;
- color:white;background:#167fc0;
- font-weight:bold;font-size:14px;
- cursor:pointer;
- transition:transform .2s,opacity .2s;
+
+body {
+  background: #080b10;
+  color: white;
+  overflow: hidden;
+  user-select: none;
 }
-button:active{transform:scale(.94)}
-button:disabled{opacity:.35}
-.hidden{display:none!important}
+
+button {
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 40%, #202a36 0%, #080b10 70%);
+  z-index: 5;
+}
+
+.hidden {
+  display: none !important;
+}
 
 /* INTRO */
-#intro{
- position:fixed;inset:0;background:#080d16;
- display:flex;align-items:center;justify-content:center;
- z-index:20;flex-direction:column;
-}
-#introText{
- font-size:clamp(28px,9vw,48px);
- font-weight:900;letter-spacing:3px;
- color:#42caff;
-}
-.letter{
- display:inline-block;
- opacity:0;transform:translateY(20px);
- animation:letterIn .45s forwards;
-}
-@keyframes letterIn{
- to{opacity:1;transform:translateY(0)}
-}
-#introSub{
- margin-top:15px;color:#aaa;
- opacity:0;animation:fadeIn 1s 1.7s forwards;
-}
-@keyframes fadeIn{to{opacity:1}}
 
-/* MENU */
-#menu{
- min-height:100vh;padding:35px 20px;
- display:flex;flex-direction:column;
- align-items:center;justify-content:center;
- background:
- radial-gradient(circle at 50% 20%,#17466b,#10151d 65%);
-}
-.menu-title{
- font-size:36px;font-weight:900;
- color:#45caff;text-shadow:0 0 20px #168fcf;
- animation:titlePulse 2s infinite alternate;
-}
-@keyframes titlePulse{
- to{text-shadow:0 0 30px #28baff}
-}
-.menu-buttons{
- display:flex;flex-direction:column;
- width:min(85%,300px);gap:12px;margin-top:35px;
-}
-.menu-buttons button{
- opacity:0;animation:menuIn .5s forwards;
-}
-.menu-buttons button:nth-child(1){animation-delay:.2s}
-.menu-buttons button:nth-child(2){animation-delay:.4s}
-.menu-buttons button:nth-child(3){animation-delay:.6s}
-@keyframes menuIn{
- from{opacity:0;transform:translateY(25px)}
- to{opacity:1;transform:translateY(0)}
+#introScreen {
+  background: #05070a;
+  z-index: 20;
 }
 
-/* SCREEN TRANSITION */
-.screen{
- animation:screenIn .4s ease;
+.intro-title {
+  font-size: clamp(35px, 10vw, 65px);
+  font-weight: 900;
+  letter-spacing: 5px;
+  color: #ff8a00;
+  text-shadow: 0 0 25px #ff7800;
 }
-@keyframes screenIn{
- from{opacity:0;transform:translateY(15px)}
- to{opacity:1;transform:translateY(0)}
+
+.intro-title span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(25px);
+  animation: letterIn .45s forwards;
+}
+
+@keyframes letterIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-sub {
+  margin-top: 15px;
+  color: #8b98a8;
+  letter-spacing: 5px;
+  font-size: 11px;
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* MAIN MENU */
+
+.logo {
+  font-size: clamp(35px, 9vw, 58px);
+  font-weight: 1000;
+  font-style: italic;
+  letter-spacing: -2px;
+}
+
+.logo span {
+  color: #ff8500;
+}
+
+.subtitle {
+  color: #8995a4;
+  letter-spacing: 5px;
+  font-size: 11px;
+  margin-top: 8px;
+  margin-bottom: 40px;
+}
+
+.menu-buttons {
+  width: min(82%, 330px);
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.main-btn {
+  padding: 17px;
+  border-radius: 9px;
+  background: #ff8500;
+  color: #101010;
+  font-size: 15px;
+  letter-spacing: 2px;
+  box-shadow: 0 5px 0 #a94f00;
+  transition: .15s;
+}
+
+.main-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #a94f00;
+}
+
+.secondary-btn {
+  padding: 15px;
+  border-radius: 9px;
+  background: #1a222d;
+  border: 1px solid #354252;
+  letter-spacing: 1px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 22px;
+  color: #586574;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+/* PANELS */
+
+.panel {
+  width: min(88%, 360px);
+  padding: 25px;
+  background: #121923;
+  border: 1px solid #354252;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.panel h2 {
+  color: #ff8500;
+  margin-bottom: 22px;
+  letter-spacing: 2px;
+}
+
+.panel p {
+  color: #b9c3ce;
+  margin: 15px 0;
+}
+
+.panel button {
+  width: 100%;
+  margin-top: 12px;
 }
 
 /* GAME */
-.hud{
- display:flex;justify-content:space-around;
- padding:10px;font-size:13px;font-weight:bold;
-}
-#game{
- width:min(100%,420px);height:auto;
- display:block;margin:auto;
- border:3px solid #46505b;border-radius:12px;
- background:#315d30;
- touch-action:pan-y;
-}
-.skills{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:7px;max-width:420px;margin:12px auto;
- padding:0 5px;
-}
-.skills button{font-size:11px;padding:12px 3px}
-.controls{
- display:flex;justify-content:center;
- gap:25px;margin:12px;
-}
-.controls button{width:110px;font-size:18px}
-#gameScreen{padding-bottom:20px}
 
-/* OTHER PANELS */
-.panel{
- width:min(88%,350px);
- background:#202b3a;padding:25px;
- border-radius:18px;margin:auto;
- box-shadow:0 10px 35px #0007;
+#gameScreen {
+  background: #080b10;
+  z-index: 2;
+  justify-content: flex-start;
 }
-.panel button{width:100%;margin-top:12px}
-.small{font-size:12px;color:#aab6c5}
-#flash{
- position:fixed;inset:0;background:white;
- opacity:0;pointer-events:none;z-index:30;
+
+#gameCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
-#finishScreen{
- position:fixed;inset:0;z-index:25;
- background:#080b14;
- display:flex;align-items:center;justify-content:center;
- flex-direction:column;padding:20px;
+
+.hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 17px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  z-index: 3;
 }
-#finishTitle{
- font-size:35px;color:#ffcf48;
- animation:titlePulse .5s infinite alternate;
+
+.hud-box {
+  background: #101923dd;
+  border: 1px solid #3a4654;
+  border-radius: 9px;
+  padding: 9px 13px;
+  min-width: 90px;
 }
-#finishSurprise{
- font-size:70px;margin:15px;
- animation:surprise .5s infinite alternate;
+
+.hud-label {
+  font-size: 9px;
+  color: #93a0af;
+  letter-spacing: 2px;
 }
-@keyframes surprise{
- from{transform:scale(.85)}
- to{transform:scale(1.15)}
+
+.hud-value {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ff9200;
+  margin-top: 4px;
+}
+
+.pause-btn {
+  pointer-events: auto;
+  width: 43px;
+  height: 43px;
+  border-radius: 9px;
+  background: #ff8500;
+  color: #111;
+  font-size: 18px;
+}
+
+.skills {
+  position: absolute;
+  bottom: 22px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 10px;
+  z-index: 3;
+}
+
+.skill-btn {
+  flex: 1;
+  max-width: 115px;
+  min-height: 63px;
+  border-radius: 10px;
+  background: #17212c;
+  border: 1px solid #526071;
+  font-size: 10px;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-btn strong {
+  display: block;
+  color: #ff9200;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.skill-btn:disabled {
+  opacity: .35;
+}
+
+.skill-btn.active {
+  border-color: #ff9200;
+  box-shadow: 0 0 15px #ff850055;
+}
+
+.cooldown-text {
+  display: block;
+  font-size: 9px;
+  color: #9aa7b6;
+  margin-top: 3px;
+}
+
+/* CONTROLS */
+
+.controls {
+  position: absolute;
+  bottom: 105px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.control-btn {
+  pointer-events: auto;
+  width: 62px;
+  height: 52px;
+  border-radius: 12px;
+  background: #18222ddd;
+  border: 1px solid #596777;
+  font-size: 24px;
+}
+
+/* PAUSE / GAME OVER / FINISH */
+
+#pauseScreen, #gameOverScreen, #finishScreen {
+  z-index: 10;
+  background: #05080deF;
+}
+
+.big-score {
+  font-size: 48px;
+  color: #ff8500;
+  font-weight: 900;
+  margin: 12px 0;
+}
+
+.result-label {
+  color: #9ba7b4;
+  letter-spacing: 3px;
+  font-size: 11px;
+}
+
+#finishScreen {
+  background: radial-gradient(circle, #33200b, #05070a 75%);
+}
+
+.finish-face {
+  font-size: 75px;
+  animation: surprise .6s infinite alternate;
+}
+
+@keyframes surprise {
+  from { transform: scale(.9) rotate(-4deg); }
+  to { transform: scale(1.08) rotate(4deg); }
+}
+
+.small-note {
+  color: #8190a0;
+  font-size: 11px;
+  margin-top: 12px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="intro">
- <div id="introText"></div>
- <div id="introSub">PRESENTS HIGHWAY RUSH</div>
-</div>
+<!-- INTRO -->
+<section id="introScreen" class="screen">
+  <div class="intro-title" id="introTitle"></div>
+  <div class="intro-sub">PRESENTS</div>
+</section>
 
-<!-- MAIN MENU -->
-<section id="menu" class="hidden screen">
- <div class="menu-title">HIGHWAY RUSH</div>
- <p class="small">ENDLESS HIGHWAY CHALLENGE</p>
+<!-- MENU -->
+<section id="menuScreen" class="screen hidden">
+  <div class="logo">HIGHWAY <span>RUSH</span></div>
+  <div class="subtitle">ENDLESS HIGHWAY EXPERIENCE</div>
 
- <div class="menu-buttons">
-  <button onclick="openGame()">🚗 PLAY</button>
-  <button onclick="openHighScore()">🏆 HIGH SCORE</button>
-  <button onclick="openSettings()">⚙ SETTINGS</button>
- </div>
+  <div class="menu-buttons">
+    <button class="main-btn" onclick="startGame()">▶ PLAY</button>
+    <button class="secondary-btn" onclick="showHighScore()">🏆 HIGH SCORE</button>
+    <button class="secondary-btn" onclick="showSettings()">⚙ SETTINGS</button>
+  </div>
 
- <p class="small" style="margin-top:45px">CREATED BY ADIT ®</p>
+  <div class="footer">ADIT ® • VERSION 1.0</div>
 </section>
 
 <!-- HIGH SCORE -->
-<section id="highScoreScreen" class="hidden screen">
- <div class="panel" style="margin-top:30vh">
-  <h2>🏆 HIGH SCORE</h2>
-  <h1 id="bestDisplay">0</h1>
-  <p class="small">Rekor tertinggi di perangkat ini</p>
-  <button onclick="backMenu()">KEMBALI</button>
- </div>
+<section id="highScoreScreen" class="screen hidden">
+  <div class="panel">
+    <h2>🏆 HIGH SCORE</h2>
+    <div class="result-label">YOUR BEST DISTANCE</div>
+    <div class="big-score" id="bestScoreDisplay">0</div>
+    <button class="main-btn" onclick="showScreen('menuScreen')">BACK</button>
+  </div>
 </section>
 
 <!-- SETTINGS -->
-<section id="settingsScreen" class="hidden screen">
- <div class="panel" style="margin-top:20vh">
-  <h2>⚙ SETTINGS</h2>
-  <p>Efek suara</p>
-  <button id="soundButton" onclick="toggleSound()">SOUND: ON</button>
-  <p class="small">Pengaturan tersimpan di perangkat.</p>
-  <button onclick="backMenu()">KEMBALI</button>
- </div>
+<section id="settingsScreen" class="screen hidden">
+  <div class="panel">
+    <h2>⚙ SETTINGS</h2>
+    <p>Sound Effects</p>
+    <button class="secondary-btn" id="soundButton" onclick="toggleSound()">SOUND: ON</button>
+    <p class="small-note">Sound effects can be enabled or disabled.</p>
+    <button class="main-btn" onclick="showScreen('menuScreen')">BACK</button>
+  </div>
 </section>
 
 <!-- GAME -->
-<section id="gameScreen" class="hidden screen">
- <h1>HIGHWAY RUSH</h1>
+<section id="gameScreen" class="screen hidden">
+  <canvas id="gameCanvas"></canvas>
 
- <div class="hud">
-  <span>🏆 <b id="score">0</b></span>
-  <span>🥇 <b id="best">0</b></span>
-  <span>⚡ <b id="speed">1x</b></span>
- </div>
+  <div class="hud">
+    <div class="hud-box">
+      <div class="hud-label">DISTANCE</div>
+      <div class="hud-value" id="scoreDisplay">0</div>
+    </div>
 
- <canvas id="game" width="390" height="560"></canvas>
+    <div class="hud-box">
+      <div class="hud-label">SPEED</div>
+      <div class="hud-value"><span id="speedDisplay">1</span><small> x</small></div>
+    </div>
 
- <div class="skills">
-  <button id="mega" onclick="activateSkill('mega')">🚙 MEGA<br>LOCKED</button>
-  <button id="fly" onclick="activateSkill('fly')">✈️ FLY<br>LOCKED</button>
-  <button id="slow" onclick="activateSkill('slow')">🐢 SLOW<br>LOCKED</button>
- </div>
+    <button class="pause-btn" onclick="pauseGame()">Ⅱ</button>
+  </div>
 
- <p class="small">Skill terbuka pada skor 150 • Cooldown 90 detik</p>
+  <div class="controls">
+    <button class="control-btn" id="leftBtn">◀</button>
+    <button class="control-btn" id="rightBtn">▶</button>
+  </div>
 
- <div class="controls">
-  <button onclick="move(-1)">⬅ KIRI</button>
-  <button onclick="move(1)">KANAN ➡</button>
- </div>
+  <div class="skills">
+    <button class="skill-btn" id="megaBtn" onclick="useSkill('mega')">
+      <strong>MEGA CAR</strong>
+      <span>POWER</span>
+      <span class="cooldown-text" id="megaStatus">LOCKED</span>
+    </button>
+
+    <button class="skill-btn" id="flyBtn" onclick="useSkill('fly')">
+      <strong>FLY</strong>
+      <span>FLIGHT</span>
+      <span class="cooldown-text" id="flyStatus">LOCKED</span>
+    </button>
+
+    <button class="skill-btn" id="slowBtn" onclick="useSkill('slow')">
+      <strong>SLOW TIME</strong>
+      <span>CONTROL</span>
+      <span class="cooldown-text" id="slowStatus">LOCKED</span>
+    </button>
+  </div>
+</section>
+
+<!-- PAUSE -->
+<section id="pauseScreen" class="screen hidden">
+  <div class="panel">
+    <h2>GAME PAUSED</h2>
+    <p>Take a break.</p>
+    <button class="main-btn" onclick="resumeGame()">▶ RESUME</button>
+    <button class="secondary-btn" onclick="backToMenu()">MAIN MENU</button>
+  </div>
 </section>
 
 <!-- GAME OVER -->
-<section id="gameOverScreen" class="hidden screen">
- <div class="panel" style="margin-top:25vh">
-  <h1>GAME OVER</h1>
-  <h2>Skor: <span id="finalScore">0</span></h2>
-  <p>Rekor: <b id="finalBest">0</b></p>
-  <button onclick="openGame()">MAIN LAGI</button>
-  <button onclick="backMenu()">MENU UTAMA</button>
- </div>
+<section id="gameOverScreen" class="screen hidden">
+  <div class="panel">
+    <h2>GAME OVER</h2>
+    <div class="result-label">YOUR DISTANCE</div>
+    <div class="big-score" id="finalScore">0</div>
+    <p id="newRecordText"></p>
+    <button class="main-btn" onclick="startGame()">↻ PLAY AGAIN</button>
+    <button class="secondary-btn" onclick="backToMenu()">MAIN MENU</button>
+  </div>
 </section>
 
 <!-- FINISH -->
-<section id="finishScreen" class="hidden">
- <div id="finishTitle">YOU FINISHED!</div>
- <div id="finishSurprise">😈</div>
- <h2>1.000 SCORE!</h2>
- <p>Kamu berhasil menyelesaikan HIGHWAY RUSH!</p>
- <button onclick="backMenu()">KEMBALI KE MENU</button>
+<section id="finishScreen" class="screen hidden">
+  <div class="finish-face">😈</div>
+  <h1 style="color:#ff8500; margin-top:15px;">HIGHWAY COMPLETE!</h1>
+  <p style="margin-top:12px;">You reached 1000 distance.</p>
+  <div class="big-score">1000</div>
+  <button class="main-btn" style="width:80%;max-width:300px;margin-top:20px" onclick="backToMenu()">BACK TO MENU</button>
 </section>
 
-<div id="flash"></div>
-
 <script>
-/* INTRO LETTER ANIMATION */
-const introText="ADIT ®";
-const introElement=document.getElementById("introText");
+/* ==========================
+   HIGHWAY RUSH
+   GAME SYSTEM
+========================== */
 
-introText.split("").forEach((letter,i)=>{
- const span=document.createElement("span");
- span.className="letter";
- span.textContent=letter===" "?"\u00a0":letter;
- span.style.animationDelay=(i*.25)+"s";
- introElement.appendChild(span);
-});
+const $ = id => document.getElementById(id);
 
-setTimeout(()=>{
- document.getElementById("intro").classList.add("hidden");
- showScreen("menu");
-},2800);
-
-/* SCREEN SYSTEM */
-const screens=[
- "menu","highScoreScreen","settingsScreen",
- "gameScreen","gameOverScreen"
+const screens = [
+  "introScreen",
+  "menuScreen",
+  "highScoreScreen",
+  "settingsScreen",
+  "gameScreen",
+  "pauseScreen",
+  "gameOverScreen",
+  "finishScreen"
 ];
 
-function showScreen(id){
- screens.forEach(s=>{
-  document.getElementById(s).classList.add("hidden");
- });
- const el=document.getElementById(id);
- el.classList.remove("hidden");
- el.classList.remove("screen");
- void el.offsetWidth;
- el.classList.add("screen");
+function showScreen(id) {
+  screens.forEach(screen => $(screen).classList.add("hidden"));
+  $(id).classList.remove("hidden");
 }
 
-function backMenu(){
- running=false;
- showScreen("menu");
+/* INTRO ANIMATION */
+
+const introText = "ADIT ®";
+
+[...introText].forEach((letter, index) => {
+  const span = document.createElement("span");
+  span.textContent = letter === " " ? "\u00a0" : letter;
+  span.style.animationDelay = (index * 0.18) + "s";
+  $("introTitle").appendChild(span);
+});
+
+setTimeout(() => {
+  showScreen("menuScreen");
+}, 2300);
+
+/* SETTINGS */
+
+let soundEnabled = localStorage.getItem("hrSound") !== "off";
+let audioContext = null;
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  localStorage.setItem("hrSound", soundEnabled ? "on" : "off");
+  updateSoundButton();
+  beep(500, .08);
 }
 
-function openHighScore(){
- document.getElementById("bestDisplay").textContent=bestScore;
- showScreen("highScoreScreen");
+function updateSoundButton() {
+  $("soundButton").textContent = "SOUND: " + (soundEnabled ? "ON" : "OFF");
 }
 
-function openSettings(){
- showScreen("settingsScreen");
+function beep(frequency = 400, duration = .1) {
+  if (!soundEnabled) return;
+
+  try {
+    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.frequency.value = frequency;
+    oscillator.type = "sine";
+    gain.gain.setValueAtTime(.08, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001, audioContext.currentTime + duration);
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + duration);
+  } catch (error) {}
 }
 
-/* SOUND */
-let soundOn=localStorage.getItem("hrSound")!=="off";
-
-function toggleSound(){
- soundOn=!soundOn;
- localStorage.setItem("hrSound",soundOn?"on":"off");
- updateSoundButton();
-}
-
-function updateSoundButton(){
- document.getElementById("soundButton").textContent=
-  "SOUND: "+(soundOn?"ON":"OFF");
-}
 updateSoundButton();
 
-/* SIMPLE ORIGINAL SOUND EFFECT */
-let audioContext=null;
+/* MENU */
 
-function playBeep(freq=440,duration=.12){
- if(!soundOn)return;
- try{
-  audioContext=audioContext||new (window.AudioContext||window.webkitAudioContext)();
-  if(audioContext.state==="suspended")audioContext.resume();
-  const osc=audioContext.createOscillator();
-  const gain=audioContext.createGain();
-  osc.frequency.value=freq;
-  gain.gain.setValueAtTime(.06,audioContext.currentTime);
-  gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);
-  osc.connect(gain);
-  gain.connect(audioContext.destination);
-  osc.start();
-  osc.stop(audioContext.currentTime+duration);
- }catch(e){}
+function showHighScore() {
+  $("bestScoreDisplay").textContent = localStorage.getItem("hrBest") || 0;
+  showScreen("highScoreScreen");
 }
 
-/* GAME DATA */
-const canvas=document.getElementById("game");
-const ctx=canvas.getContext("2d");
-const lanes=[105,195,285];
-
-let lane=1;
-let playerX=195;
-let obstacles=[];
-let trees=[];
-let tireMarks=[];
-let score=0;
-let bestScore=Number(localStorage.getItem("hrBest")||0);
-let speed=3;
-let running=false;
-let lastTime=0;
-let roadOffset=0;
-let spawnTimer=0;
-let activeSkill=null;
-let globalCooldown=0;
-
-const duration={mega:50,fly:40,slow:60};
-let skills={mega:0,fly:0,slow:0};
-
-document.getElementById("best").textContent=bestScore;
-
-function openGame(){
- score=0;
- speed=3;
- lane=1;
- playerX=195;
- obstacles=[];
- tireMarks=[];
- trees=[];
- skills={mega:0,fly:0,slow:0};
- activeSkill=null;
- globalCooldown=0;
- roadOffset=0;
- spawnTimer=0;
- lastTime=0;
-
- for(let i=0;i<16;i++){
-  trees.push({x:Math.random()<.5?35:355,y:i*40});
- }
-
- running=true;
- showScreen("gameScreen");
- updateSkillButtons();
- requestAnimationFrame(loop);
+function showSettings() {
+  updateSoundButton();
+  showScreen("settingsScreen");
 }
 
-function move(d){
- if(!running)return;
- const oldLane=lane;
- lane=Math.max(0,Math.min(2,lane+d));
+/* CANVAS */
 
- if(oldLane!==lane){
-  tireMarks.push({
-   x:playerX,y:455,life:1
+const canvas = $("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let W = 0;
+let H = 0;
+let roadWidth = 0;
+let laneWidth = 0;
+let roadLeft = 0;
+
+function resizeCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  W = window.innerWidth;
+  H = window.innerHeight;
+
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+
+  canvas.style.width = W + "px";
+  canvas.style.height = H + "px";
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  roadWidth = Math.min(W * .76, 430);
+  roadLeft = (W - roadWidth) / 2;
+  laneWidth = roadWidth / 3;
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+/* GAME VARIABLES */
+
+let running = false;
+let paused = false;
+let score = 0;
+let speed = 1;
+let playerLane = 1;
+let playerX = 0;
+let obstacles = [];
+let trees = [];
+let tireMarks = [];
+let roadOffset = 0;
+let lastTime = 0;
+let spawnTimer = 0;
+
+const player = {
+  width: 32,
+  height: 56,
+  y: 0
+};
+
+let activeSkill = null;
+let skillEnd = 0;
+let cooldownEnd = 0;
+
+const SKILL_DURATION = {
+  mega: 50,
+  fly: 40,
+  slow: 60
+};
+
+const SKILL_UNLOCK_SCORE = 150;
+const SKILL_COOLDOWN = 90;
+
+/* GAME START */
+
+function startGame() {
+  score = 0;
+  speed = 1;
+  playerLane = 1;
+  playerX = roadLeft + laneWidth * 1.5;
+  player.y = H - 170;
+
+  obstacles = [];
+  trees = [];
+  tireMarks = [];
+
+  roadOffset = 0;
+  spawnTimer = 0;
+
+  activeSkill = null;
+  skillEnd = 0;
+  cooldownEnd = 0;
+
+  paused = false;
+  running = true;
+
+  showScreen("gameScreen");
+  updateHUD();
+
+  lastTime = performance.now();
+  requestAnimationFrame(gameLoop);
+}
+
+/* MOVEMENT */
+
+function changeLane(direction) {
+  if (!running || paused) return;
+
+  const oldX = playerX;
+
+  playerLane = Math.max(0, Math.min(2, playerLane + direction));
+
+  const newX = roadLeft + laneWidth * (playerLane + .5);
+
+  if (oldX !== newX) {
+    tireMarks.push({
+      x: oldX,
+      y: player.y + player.height,
+      life: 1
+    });
+    beep(250, .06);
+  }
+}
+
+$("leftBtn").addEventListener("pointerdown", () => changeLane(-1));
+$("rightBtn").addEventListener("pointerdown", () => changeLane(1));
+
+document.addEventListener("keydown", event => {
+  if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
+    changeLane(-1);
+  }
+
+  if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") {
+    changeLane(1);
+  }
+
+  if (event.key === "Escape" && running) {
+    paused ? resumeGame() : pauseGame();
+  }
+});
+
+/* SKILLS */
+
+function useSkill(type) {
+  if (!running || paused) return;
+  if (score < SKILL_UNLOCK_SCORE) return;
+  if (activeSkill || performance.now() < cooldownEnd) return;
+
+  activeSkill = type;
+  skillEnd = performance.now() + SKILL_DURATION[type] * 1000;
+
+  beep(750, .2);
+  updateHUD();
+}
+
+function endSkill() {
+  if (!activeSkill) return;
+
+  activeSkill = null;
+  cooldownEnd = performance.now() + SKILL_COOLDOWN * 1000;
+
+  updateHUD();
+}
+
+function updateSkills() {
+  const now = performance.now();
+
+  if (activeSkill && now >= skillEnd) {
+    endSkill();
+  }
+
+  const unlocked = score >= SKILL_UNLOCK_SCORE;
+  const cooling = now < cooldownEnd;
+
+  ["mega", "fly", "slow"].forEach(type => {
+    const button = $(type + "Btn");
+    const status = $(type + "Status");
+
+    button.classList.toggle("active", activeSkill === type);
+
+    button.disabled =
+      !unlocked ||
+      !!activeSkill ||
+      cooling ||
+      !running ||
+      paused;
+
+    if (!unlocked) {
+      status.textContent = "UNLOCK AT 150";
+    } else if (activeSkill === type) {
+      status.textContent = Math.ceil((skillEnd - now) / 1000) + "s";
+    } else if (activeSkill) {
+      status.textContent = "IN USE";
+    } else if (cooling) {
+      status.textContent = "COOLDOWN " + Math.ceil((cooldownEnd - now) / 1000) + "s";
+    } else {
+      status.textContent = "READY";
+    }
   });
-  playBeep(250,.06);
- }
 }
 
-function activateSkill(name){
- if(!running||score<150||activeSkill!==null||globalCooldown>0)return;
+/* SPAWNING */
 
- activeSkill=name;
- skills[name]=duration[name];
- playBeep(700,.2);
- updateSkillButtons();
+function spawnObstacle() {
+  const lane = Math.floor(Math.random() * 3);
+
+  obstacles.push({
+    lane,
+    x: roadLeft + laneWidth * (lane + .5),
+    y: -90,
+    width: 34,
+    height: 58,
+    color: ["#d84a35", "#3b91d8", "#e0b33f"][Math.floor(Math.random() * 3)]
+  });
 }
 
-/* DRAWING */
-function drawCar(x,y,color,scale=1){
- ctx.save();
- ctx.translate(x,y);
- ctx.scale(scale,scale);
+function spawnTree() {
+  const side = Math.random() < .5 ? -1 : 1;
 
- ctx.fillStyle="#111";
- ctx.fillRect(-15,-20,30,42);
- ctx.fillStyle=color;
- ctx.fillRect(-12,-24,24,43);
- ctx.fillStyle="#9deaff";
- ctx.fillRect(-9,-16,18,10);
- ctx.fillStyle="#222";
- ctx.fillRect(-15,-15,5,12);
- ctx.fillRect(10,-15,5,12);
- ctx.fillStyle="#fff";
- ctx.fillRect(-9,15,5,4);
- ctx.fillRect(4,15,5,4);
-
- ctx.restore();
+  trees.push({
+    x: side < 0 ? roadLeft - 25 : roadLeft + roadWidth + 25,
+    y: -35,
+    size: 12 + Math.random() * 12
+  });
 }
 
-function drawTree(x,y){
+/* DRAW ROAD */
+
+function drawRoad() {
+  ctx.fillStyle = "#101b13";
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = "#30343a";
+  ctx.fillRect(roadLeft, 0, roadWidth, H);
+
+  ctx.fillStyle = "#f4f0df";
+  ctx.fillRect(roadLeft + 5, 0, 3, H);
+  ctx.fillRect(roadLeft + roadWidth - 8, 0, 3, H);
+
+  ctx.strokeStyle = "#aeb4ba";
+  ctx.lineWidth = 3;
+  ctx.setLineDash([30, 25]);
+
+  ctx.lineDashOffset = -roadOffset;
+
+  for (let i = 1; i <= 2; i++) {
+    const x = roadLeft + laneWidth * i;
+
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, H);
+    ctx.stroke();
+  }
+
+  ctx.setLineDash([]);
+
+  roadOffset += speed * 5;
+
+  if (roadOffset > 55) roadOffset = 0;
+}
+
+/* DRAW TREES */
+
+function drawTrees(dt) {
+  if (Math.random() < .045) spawnTree();
+
+  trees.forEach(tree => {
+    tree.y += speed * 4 * dt;
+
+    ctx.fillStyle = "#633d21";
+    ctx.fillRect(tree.x - 3, tree.y, 6, 18);
+
+    ctx.fillStyle = "#207b3d";
+    ctx.beginPath();
+    ctx.arc(tree.x, tree.y, tree.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  trees = trees.filter(tree => tree.y < H + 50);
+}
+
+/* DRAW CARS */
+
+function drawCar(x, y, color, isPlayer = false) {
+  const width = isPlayer && activeSkill === "mega" ? 48 : 34;
+  const height = isPlayer && activeSkill === "mega" ? 72 : 56;
+
+  if (isPlayer && activeSkill === "fly") {
+    y -= 35;
+  }
+
+  ctx.fillStyle = "#08090b";
+  ctx.fillRect(x - width / 2 - 4, y + 9, 5, height - 16);
+  ctx.fillRect(x + width / 2 - 1, y + 9, 5, height - 16);
+
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.roundRect(x - width / 2, y, width, height, 8);
+  ctx.fill();
+
+  ctx.fillStyle = "#b7d8ed";
+  ctx.fillRect(x - width / 2 + 5, y + 9, width - 10, 13);
+
+  ctx.fillStyle = "#111820";
+  ctx.fillRect(x - width / 2 + 5, y + 29, width - 10, 14);
+
+  ctx.fillStyle = "#ffdf75";
+  ctx.fillRect(x - width / 2 + 4, y + height - 7, 7, 4);
+  ctx.fillRect(x + width / 2 - 11, y + height - 7, 7, 4);
+
+  if (isPlayer && activeSkill === "mega") {
+    ctx.strokeStyle = "#ff9500";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(x - width / 2 - 4, y - 4, width + 8, height + 8);
+  }
+}
+
+/* TIRE MARKS */
+
+function drawTireMarks(dt) {
+  tireMarks.forEach(mark => {
+    mark.life -= .018 * dt;
+
+    ctx.fillStyle = `rgba(10,10,10,${Math.max(0, mark.life * .5)})`;
+    ctx.fillRect(mark.x - 12, mark.y, 4, 20);
+    ctx.fillRect(mark.x + 8, mark.y, 4, 20);
+  });
+
+  tireMarks = tireMarks.filter(mark => mark.life > 0);
+}
+
+/* COLLISION */
+
+function checkCollision(obstacle) {
+  const playerWidth = activeSkill === "mega" ? 48 : 34;
+
+  const playerLeft = playerX - playerWidth / 2;
+  const playerRight = playerX + playerWidth / 2;
+  const playerTop = player.y;
+  const playerBottom = player.y + player.height;
+
+  const hit =
+    playerLeft < obstacle.x + obstacle.width / 2 &&
+    playerRight > obstacle.x - obstacle.width / 2 &&
+    playerTop < obstacle.y + obstacle.height &&
+    playerBottom > obstacle.y;
+
+  return hit;
+}
+
+/* HUD */
+
+function updateHUD() {
+  $("scoreDisplay").textContent = Math.floor(score);
+  $("speedDisplay").textContent = speed.toFixed(1);
+
+  updateSkills();
+}
+
+/* GAME LOOP */
+
+function gameLoop(now) {
+  if (!running || paused) return;
+
+  const dt = Math.min((now - lastTime) / 16.67, 2);
+  lastTime = now;
+
+  const slow = activeSkill === "slow";
+  const gameSpeed = slow ? .45 : 1;
+
+  speed = 1 + Math.min(score / 250, 3);
+
+  score += .35 * gameSpeed * dt;
+
+  if (score >= 1000) {
+    score = 1000;
+    finishGame();
+    return;
+  }
+
+  player.y = H - 170;
+
+  const targetX = roadLeft + laneWidth * (playerLane + .5);
+  playerX += (targetX - playerX) * .25;
+
+  drawRoad();
+  drawTrees(dt * gameSpeed);
+  drawTireMarks(dt);
+
+  spawnTimer += dt * gameSpeed;
+
+  if (spawnTimer > Math.max(25, 75 - speed * 9)) {
+    spawnObstacle();
+    spawnTimer = 0;
+  }
+
+  obstacles.forEach(obstacle => {
+    obstacle.y += speed * 4.2 * gameSpeed * dt;
+
+    drawCar(obstacle.x, obstacle.y, obstacle.color);
+
+    if (checkCollision(obstacle)) {
+      if (activeSkill === "mega" || activeSkill === "fly") {
+        obstacle.y = H + 100;
+        beep(180, .08);
+      } else {
+        endGame();
+      }
+    }
+  });
+
+  obstacles = obstacles.filter(obstacle => obstacle.y < H + 100);
+
+  drawCar(playerX, player.y, "#ff8500", true);
+
+  updateHUD();
+
+  requestAnimationFrame(gameLoop);
+}
+
+/* PAUSE */
+
+function pauseGame() {
+  if (!running || paused) return;
+
+  paused = true;
+  showScreen("pauseScreen");
+}
+
+function resumeGame() {
+  if (!running || !paused) return;
+
+  paused = false;
+  showScreen("gction drawTree(x,y){
  ctx.fillStyle="#75421d";
  ctx.fillRect(x-4,y+5,8,19);
  ctx.fillStyle="#126b2c";
