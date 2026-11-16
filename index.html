@@ -3,9 +3,9 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="theme-color" content="#080b12">
-<title>HIGHWAY RUSH</title>
+<title>HIGHWAY RUSH HD</title>
 
 <style>
 * {
@@ -42,83 +42,78 @@ button {
   display: flex;
 }
 
+/* INTRO */
+
 #introScreen {
-  background:
-    radial-gradient(circle at center, #202b3e 0%, #080b12 65%);
+  z-index: 20;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  z-index: 20;
+  background: radial-gradient(circle, #26364e, #080b12 70%);
 }
 
 .intro-title {
-  font-size: clamp(38px, 12vw, 65px);
+  font-size: clamp(40px, 12vw, 68px);
   font-weight: 1000;
   letter-spacing: 5px;
-  color: white;
-  text-shadow: 0 0 25px #ff6b22;
+  text-shadow: 0 0 25px #ff762c;
 }
 
 .intro-title span {
   display: inline-block;
   opacity: 0;
-  animation: letterIn .35s forwards;
+  animation: letterIn .4s forwards;
 }
 
 @keyframes letterIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(.7);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(25px) scale(.7); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .presents {
   margin-top: 15px;
   color: #ff792d;
   letter-spacing: 8px;
-  font-size: 15px;
+  font-size: 13px;
   opacity: 0;
-  animation: presentIn 1s forwards;
-  animation-delay: 1.3s;
+  animation: presentIn .8s 1.2s forwards;
 }
 
 @keyframes presentIn {
-  from { opacity: 0; letter-spacing: 15px; }
-  to { opacity: 1; letter-spacing: 8px; }
+  to { opacity: 1; letter-spacing: 5px; }
 }
 
 .loading {
   width: 190px;
-  height: 4px;
-  background: #252b37;
+  height: 5px;
   margin-top: 35px;
   border-radius: 10px;
   overflow: hidden;
+  background: #303b4c;
 }
 
 .loading div {
   height: 100%;
   width: 0;
-  background: #ff762c;
-  animation: loading 2.5s linear forwards;
+  background: #ff792d;
+  animation: load 2.5s linear forwards;
 }
 
-@keyframes loading {
+@keyframes load {
   to { width: 100%; }
 }
 
+/* MENU */
+
 #menuScreen {
-  background:
-    linear-gradient(180deg, rgba(5,8,14,.45), #080b12 95%),
-    radial-gradient(circle at 50% 25%, #34465b, #080b12 70%);
-  flex-direction: column;
+  z-index: 2;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  flex-direction: column;
+  padding: 22px;
+  background:
+    radial-gradient(circle at 50% 20%, #344961, transparent 55%),
+    linear-gradient(#111b29, #080b12);
 }
 
 .menu-road {
@@ -128,23 +123,21 @@ button {
   top: -10%;
   left: 50%;
   transform: translateX(-50%);
-  background: #171d27;
+  background: #1a222e;
   border-left: 5px solid #ff762c;
   border-right: 5px solid #ff762c;
-  opacity: .45;
+  opacity: .4;
 }
 
 .menu-road::before,
 .menu-road::after {
   content: "";
   position: absolute;
-  height: 100%;
-  width: 5px;
   top: 0;
+  height: 100%;
+  width: 4px;
   background: repeating-linear-gradient(
-    to bottom,
-    white 0 45px,
-    transparent 45px 90px
+    to bottom, white 0 45px, transparent 45px 90px
   );
 }
 
@@ -158,33 +151,31 @@ button {
 }
 
 .logo {
-  font-size: clamp(35px, 10vw, 55px);
+  font-size: clamp(38px, 11vw, 60px);
   font-weight: 1000;
   font-style: italic;
-  line-height: .95;
+  line-height: .9;
   text-shadow: 4px 4px 0 #a83c0d;
 }
 
-.logo span {
-  color: #ff792d;
-}
+.logo span { color: #ff792d; }
 
 .subtitle {
   color: #aeb9c9;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 5px;
-  margin: 14px 0 40px;
+  margin: 15px 0 35px;
 }
 
 .menu-btn {
   display: block;
   width: 100%;
-  padding: 17px;
-  margin: 12px 0;
+  padding: 16px;
+  margin: 11px 0;
   border-radius: 9px;
-  background: #202b3b;
-  border: 1px solid #3d4b60;
-  transition: .15s;
+  background: #202d40;
+  border: 1px solid #465970;
+  transition: transform .15s, background .15s;
 }
 
 .menu-btn:active {
@@ -198,37 +189,39 @@ button {
 }
 
 .menu-footer {
-  color: #657185;
+  color: #778397;
   font-size: 10px;
-  margin-top: 35px;
+  margin-top: 30px;
   letter-spacing: 2px;
 }
+
+/* PANELS */
 
 #highScoreScreen,
 #settingsScreen,
 #pauseScreen,
 #gameOverScreen,
 #finishScreen {
-  background: rgba(5,8,14,.96);
+  z-index: 10;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 25px;
-  z-index: 10;
+  padding: 22px;
+  background: #080d16f5;
   text-align: center;
 }
 
 .panel {
   width: min(100%, 340px);
-  padding: 28px 22px;
+  padding: 25px 20px;
   border-radius: 16px;
-  background: #141c29;
-  border: 1px solid #35445a;
+  background: #141e2d;
+  border: 1px solid #40516a;
+  box-shadow: 0 15px 50px #0008;
 }
 
 .panel h1 {
   color: #ff792d;
-  font-size: 27px;
   margin-top: 0;
 }
 
@@ -239,14 +232,16 @@ button {
 }
 
 .small-text {
-  color: #9ba8ba;
-  font-size: 13px;
+  color: #a8b5c7;
+  font-size: 12px;
   line-height: 1.6;
 }
 
+/* GAME */
+
 #gameScreen {
+  z-index: 3;
   background: #101722;
-  flex-direction: column;
 }
 
 #gameCanvas {
@@ -263,16 +258,16 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  z-index: 3;
   pointer-events: none;
-  z-index: 2;
 }
 
 .hud-box {
-  background: #080b12cc;
-  border: 1px solid #ffffff22;
+  background: #080b12dd;
+  border: 1px solid #ffffff33;
   border-radius: 9px;
-  padding: 9px 12px;
-  min-width: 90px;
+  padding: 8px 12px;
+  min-width: 85px;
 }
 
 .hud-label {
@@ -289,17 +284,17 @@ button {
 
 #pauseButton {
   pointer-events: auto;
-  background: #182233dd;
-  border: 1px solid #ffffff33;
+  background: #182538ed;
+  border: 1px solid #ffffff44;
   border-radius: 9px;
-  padding: 12px 15px;
+  padding: 12px 16px;
 }
 
 .skills {
   position: absolute;
-  top: 90px;
-  left: 10px;
-  right: 10px;
+  top: 88px;
+  left: 9px;
+  right: 9px;
   display: flex;
   justify-content: center;
   gap: 7px;
@@ -309,17 +304,15 @@ button {
 .skill-btn {
   flex: 1;
   max-width: 115px;
-  min-height: 47px;
+  min-height: 46px;
   background: #121d2cdd;
   border: 1px solid #53647a;
   border-radius: 8px;
   font-size: 10px;
-  padding: 7px 3px;
+  padding: 6px 2px;
 }
 
-.skill-btn:disabled {
-  opacity: .35;
-}
+.skill-btn:disabled { opacity: .35; }
 
 .skill-btn.ready {
   border-color: #ff792d;
@@ -328,14 +321,14 @@ button {
 
 .skill-status {
   position: absolute;
-  top: 148px;
+  top: 142px;
   width: 100%;
   text-align: center;
   color: #ffb27f;
   font-size: 11px;
   font-weight: bold;
-  z-index: 2;
   text-shadow: 0 2px 4px black;
+  z-index: 3;
 }
 
 .controls {
@@ -353,15 +346,13 @@ button {
   width: 65px;
   height: 65px;
   border-radius: 50%;
-  background: #101b2bdc;
+  background: #101b2bdd;
   border: 2px solid #ffffff66;
   font-size: 25px;
   box-shadow: 0 5px 20px #0008;
 }
 
-.control-btn:active {
-  background: #ff7027;
-}
+.control-btn:active { background: #ff7027; }
 
 #speedBar {
   position: absolute;
@@ -381,65 +372,54 @@ button {
   background: #ff792d;
 }
 
-#finishScreen h1 {
-  font-size: 42px;
-  color: #ff792d;
-}
+.hidden { display: none !important; }
 
-.hidden {
-  display: none !important;
+#finishScreen h1 {
+  font-size: 38px;
+  color: #ff792d;
 }
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
 <section id="introScreen" class="screen active">
   <div class="intro-title" id="introTitle"></div>
   <div class="presents">P R E S E N T S</div>
   <div class="loading"><div></div></div>
 </section>
 
-<!-- MENU -->
 <section id="menuScreen" class="screen">
   <div class="menu-road"></div>
   <div class="menu-content">
     <div class="logo">HIGHWAY<br><span>RUSH</span></div>
     <div class="subtitle">ENDLESS ROAD EXPERIENCE</div>
-
     <button class="menu-btn primary" id="playButton">▶ PLAY GAME</button>
     <button class="menu-btn" id="scoreButton">🏆 HIGH SCORE</button>
     <button class="menu-btn" id="settingsButton">⚙ SETTINGS</button>
-
     <div class="menu-footer">ADIT ® ORIGINAL GAME</div>
   </div>
 </section>
 
-<!-- HIGH SCORE -->
 <section id="highScoreScreen" class="screen">
   <div class="panel">
     <h1>HIGH SCORE</h1>
     <div class="big-score" id="bestScoreDisplay">0</div>
-    <div class="small-text">REKOR TERBAIK DI PERANGKAT INI</div>
-    <br>
+    <p class="small-text">REKOR TERBAIK DI PERANGKAT INI</p>
     <button class="menu-btn primary" id="scoreBackButton">BACK TO MENU</button>
   </div>
 </section>
 
-<!-- SETTINGS -->
 <section id="settingsScreen" class="screen">
   <div class="panel">
     <h1>SETTINGS</h1>
     <p class="small-text">AUDIO</p>
     <button class="menu-btn" id="soundButton">SOUND: ON</button>
     <button class="menu-btn" id="musicButton">MUSIC: ON</button>
-    <br>
     <button class="menu-btn primary" id="settingsBackButton">BACK TO MENU</button>
   </div>
 </section>
 
-<!-- GAME -->
 <section id="gameScreen" class="screen">
   <canvas id="gameCanvas"></canvas>
 
@@ -448,9 +428,7 @@ button {
       <div class="hud-label">SCORE</div>
       <div class="hud-value" id="scoreDisplay">0</div>
     </div>
-
     <button id="pauseButton">Ⅱ</button>
-
     <div class="hud-box">
       <div class="hud-label">SPEED</div>
       <div class="hud-value" id="speedDisplay">1x</div>
@@ -464,7 +442,6 @@ button {
   </div>
 
   <div class="skill-status" id="skillStatus">SKILL TERBUKA DI SKOR 150</div>
-
   <div id="speedBar"><div id="speedFill"></div></div>
 
   <div class="controls">
@@ -473,7 +450,6 @@ button {
   </div>
 </section>
 
-<!-- PAUSE -->
 <section id="pauseScreen" class="screen">
   <div class="panel">
     <h1>PAUSED</h1>
@@ -484,7 +460,6 @@ button {
   </div>
 </section>
 
-<!-- GAME OVER -->
 <section id="gameOverScreen" class="screen">
   <div class="panel">
     <h1>GAME OVER</h1>
@@ -495,7 +470,6 @@ button {
   </div>
 </section>
 
-<!-- FINISH -->
 <section id="finishScreen" class="screen">
   <div class="panel">
     <h1>🏁 FINISH!</h1>
@@ -509,30 +483,25 @@ button {
 <script>
 "use strict";
 
-/* =========================
-   SCREEN SYSTEM
-========================= */
+/* SCREEN SYSTEM */
 
+const $ = id => document.getElementById(id);
 const screens = document.querySelectorAll(".screen");
 
 function showScreen(id) {
-  screens.forEach(screen => screen.classList.remove("active"));
-  const target = document.getElementById(id);
-  if (target) target.classList.add("active");
+  screens.forEach(s => s.classList.remove("active"));
+  $(id).classList.add("active");
 }
 
-/* =========================
-   INTRO SYSTEM
-========================= */
+/* INTRO SYSTEM */
 
 const introText = "ADIT ®";
-const introTitle = document.getElementById("introTitle");
 
 introText.split("").forEach((letter, index) => {
   const span = document.createElement("span");
   span.textContent = letter === " " ? "\u00a0" : letter;
   span.style.animationDelay = (index * 0.16) + "s";
-  introTitle.appendChild(span);
+  $("introTitle").appendChild(span);
 });
 
 let introFinished = false;
@@ -543,11 +512,11 @@ function finishIntro() {
   showScreen("menuScreen");
 }
 
-setTimeout(finishIntro, 3800);
+window.addEventListener("load", () => {
+  setTimeout(finishIntro, 3800);
+});
 
-/* =========================
-   AUDIO SYSTEM
-========================= */
+/* AUDIO SYSTEM */
 
 let audioContext = null;
 let soundEnabled = true;
@@ -555,78 +524,61 @@ let musicEnabled = true;
 let musicTimer = null;
 let musicStep = 0;
 
+const musicNotes = [220, 261, 329, 261, 196, 246, 293, 246];
+
 function initAudio() {
   if (!audioContext) {
-    const AudioContextClass =
-      window.AudioContext || window.webkitAudioContext;
-
-    if (AudioContextClass) {
-      audioContext = new AudioContextClass();
-    }
+    const AudioClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioClass) audioContext = new AudioClass();
   }
 
   if (audioContext && audioContext.state === "suspended") {
-    audioContext.resume();
+    audioContext.resume().catch(() => {});
   }
 }
 
-function tone(frequency, duration, type = "sine", volume = 0.04) {
+function tone(freq, duration, type = "sine", volume = .04) {
   if (!soundEnabled || !audioContext) return;
 
-  const oscillator = audioContext.createOscillator();
+  const osc = audioContext.createOscillator();
   const gain = audioContext.createGain();
 
-  oscillator.type = type;
-  oscillator.frequency.value = frequency;
-
+  osc.type = type;
+  osc.frequency.value = freq;
   gain.gain.setValueAtTime(volume, audioContext.currentTime);
   gain.gain.exponentialRampToValueAtTime(
-    0.001,
+    .001,
     audioContext.currentTime + duration
   );
 
-  oscillator.connect(gain);
+  osc.connect(gain);
   gain.connect(audioContext.destination);
-
-  oscillator.start();
-  oscillator.stop(audioContext.currentTime + duration);
+  osc.start();
+  osc.stop(audioContext.currentTime + duration);
 }
 
 function playSound(type) {
-  if (!soundEnabled) return;
   initAudio();
+  if (!soundEnabled) return;
 
-  switch (type) {
-    case "click":
-      tone(520, .08, "square", .025);
-      break;
-    case "start":
-      tone(330, .12);
-      setTimeout(() => tone(520, .16), 120);
-      break;
-    case "lane":
-      tone(260, .06, "sine", .02);
-      break;
-    case "skill":
-      tone(440, .12, "triangle");
-      setTimeout(() => tone(700, .18, "triangle"), 100);
-      break;
-    case "crash":
-      tone(110, .35, "sawtooth", .06);
-      break;
-    case "finish":
-      tone(440, .15);
-      setTimeout(() => tone(550, .15), 150);
-      setTimeout(() => tone(660, .3), 300);
-      break;
-    case "pause":
-      tone(220, .1);
-      break;
+  if (type === "click") tone(520, .08, "square", .025);
+  if (type === "start") {
+    tone(330, .12);
+    setTimeout(() => tone(520, .16), 120);
+  }
+  if (type === "lane") tone(260, .06, "sine", .02);
+  if (type === "skill") {
+    tone(440, .12, "triangle");
+    setTimeout(() => tone(700, .18, "triangle"), 100);
+  }
+  if (type === "crash") tone(110, .35, "sawtooth", .06);
+  if (type === "pause") tone(220, .1);
+  if (type === "finish") {
+    tone(440, .15);
+    setTimeout(() => tone(550, .15), 150);
+    setTimeout(() => tone(660, .3), 300);
   }
 }
-
-/* Musik sintetis original, tanpa file musik eksternal */
-const musicNotes = [220, 261, 329, 261, 196, 246, 293, 246];
 
 function startMusic() {
   if (!musicEnabled || musicTimer) return;
@@ -634,104 +586,97 @@ function startMusic() {
   if (!audioContext) return;
 
   musicTimer = setInterval(() => {
-    if (!musicEnabled || !audioContext) return;
-    if (audioContext.state !== "running") return;
+    if (!musicEnabled || audioContext.state !== "running") return;
 
-    const note = musicNotes[musicStep % musicNotes.length];
-    musicStep++;
-
-    const oscillator = audioContext.createOscillator();
+    const osc = audioContext.createOscillator();
     const gain = audioContext.createGain();
 
-    oscillator.type = "triangle";
-    oscillator.frequency.value = note;
+    osc.type = "triangle";
+    osc.frequency.value = musicNotes[musicStep % musicNotes.length];
+    musicStep++;
+
     gain.gain.value = .018;
-
-    oscillator.connect(gain);
+    osc.connect(gain);
     gain.connect(audioContext.destination);
+    osc.start();
 
-    oscillator.start();
     gain.gain.exponentialRampToValueAtTime(
       .001,
       audioContext.currentTime + .25
     );
-    oscillator.stop(audioContext.currentTime + .25);
+    osc.stop(audioContext.currentTime + .25);
   }, 300);
 }
 
 function stopMusic() {
-  if (musicTimer) {
-    clearInterval(musicTimer);
-    musicTimer = null;
-  }
+  if (musicTimer) clearInterval(musicTimer);
+  musicTimer = null;
 }
 
-/* =========================
-   SETTINGS
-========================= */
-
-const soundButton = document.getElementById("soundButton");
-const musicButton = document.getElementById("musicButton");
+/* SETTINGS */
 
 function updateSettings() {
-  soundButton.textContent = "SOUND: " + (soundEnabled ? "ON" : "OFF");
-  musicButton.textContent = "MUSIC: " + (musicEnabled ? "ON" : "OFF");
+  $("soundButton").textContent = "SOUND: " + (soundEnabled ? "ON" : "OFF");
+  $("musicButton").textContent = "MUSIC: " + (musicEnabled ? "ON" : "OFF");
 }
 
-soundButton.addEventListener("click", () => {
+$("soundButton").onclick = () => {
   soundEnabled = !soundEnabled;
   updateSettings();
   if (soundEnabled) playSound("click");
-});
+};
 
-musicButton.addEventListener("click", () => {
+$("musicButton").onclick = () => {
   musicEnabled = !musicEnabled;
-
   if (musicEnabled) startMusic();
   else stopMusic();
-
   updateSettings();
-});
+};
 
-/* =========================
-   HIGH SCORE
-========================= */
+/* HIGH SCORE */
 
-let bestScore = Number(localStorage.getItem("hrBest") || 0);
+let bestScore = 0;
 
-function updateBestScore() {
+try {
+  bestScore = Number(localStorage.getItem("hrBest") || 0);
+} catch (e) {}
+
+function saveBestScore() {
   if (score > bestScore) {
     bestScore = score;
-    localStorage.setItem("hrBest", String(bestScore));
+    try {
+      localStorage.setItem("hrBest", String(bestScore));
+    } catch (e) {}
   }
 
-  document.getElementById("bestScoreDisplay").textContent = bestScore;
+  $("bestScoreDisplay").textContent = bestScore;
 }
 
-/* =========================
-   GAME VARIABLES
-========================= */
+/* CANVAS */
 
-const canvas = document.getElementById("gameCanvas");
+const canvas = $("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 let W = 0;
 let H = 0;
+let dpr = 1;
 
 function resizeCanvas() {
   const rect = canvas.getBoundingClientRect();
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  if (rect.width < 1 || rect.height < 1) return;
 
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
   W = rect.width;
   H = rect.height;
 
   canvas.width = Math.floor(W * dpr);
   canvas.height = Math.floor(H * dpr);
-
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 window.addEventListener("resize", resizeCanvas);
+
+/* GAME VARIABLES */
 
 let running = false;
 let paused = false;
@@ -742,121 +687,10 @@ let spawnTimer = 0;
 let lastFrame = 0;
 let animationFrame = null;
 
-const lanes = [0, 1, 2];
-
-let player = {
-  lane: 1,
-  x: 0,
-  y: 0,
-  width: 39,
-  height: 68
-};
+let player = { lane: 1, y: 0, width: 38, height: 65 };
 
 let obstacles = [];
 let trees = [];
-let tireMarks = [];
-
-/* =========================
-   SKILL SYSTEM
-========================= */
-
-const SKILL_UNLOCK_SCORE = 150;
-const SKILL_COOLDOWN = 90;
-
-const skillInfo = {
-  mega: { duration: 50, label: "MEGA CAR" },
-  fly: { duration: 40, label: "FLY" },
-  slow: { duration: 60, label: "SLOW TIME" }
-};
-
-let activeSkill = null;
-let skillEndTime = 0;
-let cooldownEndTime = 0;
-
-const skillButtons = {
-  mega: document.getElementById("megaSkill"),
-  fly: document.getElementById("flySkill"),
-  slow: document.getElementById("slowSkill")
-};
-
-function activateSkill(type) {
-  if (!running || paused) return;
-  if (score < SKILL_UNLOCK_SCORE) return;
-  if (activeSkill) return;
-  if (Date.now() < cooldownEndTime) return;
-
-  activeSkill = type;
-  skillEndTime = Date.now() + skillInfo[type].duration * 1000;
-
-  playSound("skill");
-  updateSkillUI();
-}
-
-function endSkill() {
-  if (!activeSkill) return;
-
-  activeSkill = null;
-  cooldownEndTime = Date.now() + SKILL_COOLDOWN * 1000;
-  updateSkillUI();
-}
-
-function updateSkillUI() {
-  const status = document.getElementById("skillStatus");
-  const unlocked = score >= SKILL_UNLOCK_SCORE;
-  const cooling = Date.now() < cooldownEndTime;
-
-  Object.keys(skillButtons).forEach(type => {
-    const button = skillButtons[type];
-    const active = activeSkill === type;
-
-    button.disabled = !unlocked || !!activeSkill || cooling;
-    button.classList.toggle(
-      "ready",
-      unlocked && !activeSkill && !cooling
-    );
-
-    if (active) {
-      button.innerHTML =
-        skillInfo[type].label + "<br>ACTIVE";
-    } else {
-      const icons = {
-        mega: "🚘",
-        fly: "✈️",
-        slow: "⏳"
-      };
-
-      button.innerHTML =
-        icons[type] + "<br>" + skillInfo[type].label;
-    }
-  });
-
-  if (!unlocked) {
-    status.textContent =
-      "SKILL TERBUKA DI SKOR " + SKILL_UNLOCK_SCORE;
-  } else if (activeSkill) {
-    const remaining = Math.max(
-      0,
-      Math.ceil((skillEndTime - Date.now()) / 1000)
-    );
-    status.textContent =
-      skillInfo[activeSkill].label + " • " + remaining + "s";
-  } else if (cooling) {
-    const remaining = Math.ceil(
-      (cooldownEndTime - Date.now()) / 1000
-    );
-    status.textContent = "COOLDOWN • " + remaining + "s";
-  } else {
-    status.textContent = "SKILLS READY";
-  }
-}
-
-skillButtons.mega.addEventListener("click", () => activateSkill("mega"));
-skillButtons.fly.addEventListener("click", () => activateSkill("fly"));
-skillButtons.slow.addEventListener("click", () => activateSkill("slow"));
-
-/* =========================
-   ROAD AND DRAWING
-========================= */
 
 function roadBounds() {
   const roadWidth = Math.min(W * .72, 420);
@@ -872,41 +706,128 @@ function laneCenter(lane) {
   return road.left + road.width * ((lane + .5) / 3);
 }
 
-function drawRoad(delta) {
-  const road = roadBounds();
+/* SKILLS */
 
-  ctx.fillStyle = "#15291d";
-  ctx.fillRect(0, 0, W, H);
+const SKILL_UNLOCK_SCORE = 150;
+const SKILL_COOLDOWN = 90;
 
-  // Road surface
-  ctx.fillStyle = "#282e38";
-  ctx.fillRect(road.left, 0, road.width, H);
+const skillInfo = {
+  mega: { duration: 50, label: "MEGA CAR" },
+  fly: { duration: 40, label: "FLY" },
+  slow: { duration: 60, label: "SLOW TIME" }
+};
 
-  // Road edges
-  ctx.fillStyle = "#ff762c";
-  ctx.fillRect(road.left - 4, 0, 4, H);
-  ctx.fillRect(road.right, 0, 4, H);
+let activeSkill = null;
+let skillEndTime = 0;
+let cooldownEndTime = 0;
 
-  // Road lane markings
-  roadOffset += delta * speed * 0.32;
+const skillButtons = {
+  mega: $("megaSkill"),
+  fly: $("flySkill"),
+  slow: $("slowSkill")
+};
 
-  ctx.fillStyle = "#dce0e6";
+function activateSkill(type) {
+  if (!running || paused) return;
+  if (score < SKILL_UNLOCK_SCORE) return;
+  if (activeSkill || Date.now() < cooldownEndTime) return;
 
-  for (let i = 1; i <= 2; i++) {
-    const x = road.left + road.width * i / 3;
+  activeSkill = type;
+  skillEndTime = Date.now() + skillInfo[type].duration * 1000;
+  playSound("skill");
+  updateSkillUI();
+}
 
-    for (let y = -70 + (roadOffset % 70); y < H; y += 70) {
-      ctx.fillRect(x - 2, y, 4, 35);
-    }
+function endSkill() {
+  if (!activeSkill) return;
+  activeSkill = null;
+  cooldownEndTime = Date.now() + SKILL_COOLDOWN * 1000;
+  updateSkillUI();
+}
+
+function updateSkillUI() {
+  const status = $("skillStatus");
+  const unlocked = score >= SKILL_UNLOCK_SCORE;
+  const cooling = Date.now() < cooldownEndTime;
+
+  Object.keys(skillButtons).forEach(type => {
+    const button = skillButtons[type];
+    const active = activeSkill === type;
+
+    button.disabled = !unlocked || !!activeSkill || cooling;
+    button.classList.toggle("ready", unlocked && !activeSkill && !cooling);
+
+    const icons = { mega: "🚘", fly: "✈️", slow: "⏳" };
+
+    button.innerHTML = active
+      ? skillInfo[type].label + "<br>ACTIVE"
+      : icons[type] + "<br>" + skillInfo[type].label;
+  });
+
+  if (!unlocked) {
+    status.textContent = "SKILL TERBUKA DI SKOR 150";
+  } else if (activeSkill) {
+    const remaining = Math.max(0, Math.ceil((skillEndTime - Date.now()) / 1000));
+    status.textContent = skillInfo[activeSkill].label + " • " + remaining + "s";
+  } else if (cooling) {
+    const remaining = Math.ceil((cooldownEndTime - Date.now()) / 1000);
+    status.textContent = "COOLDOWN • " + remaining + "s";
+  } else {
+    status.textContent = "SKILLS READY";
+  }
+}
+
+skillButtons.mega.onclick = () => activateSkill("mega");
+skillButtons.fly.onclick = () => activateSkill("fly");
+skillButtons.slow.onclick = () => activateSkill("slow");
+
+/* DRAWING */
+
+function drawCar(x, y, color, isPlayer = false) {
+  let width = isPlayer ? 38 : 34;
+  let height = isPlayer ? 65 : 56;
+
+  if (isPlayer && activeSkill === "mega") {
+    width = 48;
+    height = 72;
   }
 
-  // Roadside grass stripes
-  ctx.fillStyle = "#1b3525";
+  if (isPlayer && activeSkill === "fly") y -= 35;
 
-  for (let y = -40 + (roadOffset % 80); y < H; y += 80) {
-    ctx.fillRect(0, y, road.left - 5, 3);
-    ctx.fillRect(road.right + 5, y, W - road.right, 3);
+  ctx.save();
+
+  if (isPlayer && activeSkill === "fly") {
+    ctx.shadowColor = "#54d9ff";
+    ctx.shadowBlur = 20;
   }
+
+  ctx.fillStyle = "#08090b";
+  ctx.fillRect(x - width / 2 - 4, y + 9, 5, height - 16);
+  ctx.fillRect(x + width / 2 - 1, y + 9, 5, height - 16);
+
+  ctx.fillStyle = "#090b10";
+  ctx.fillRect(x - width / 2 + 3, y + height - 8, width - 6, 5);
+
+  ctx.fillStyle = color;
+  ctx.fillRect(x - width / 2, y, width, height);
+
+  ctx.fillStyle = "#b7d8ed";
+  ctx.fillRect(x - width / 2 + 5, y + 9, width - 10, 13);
+
+  ctx.fillStyle = "#111820";
+  ctx.fillRect(x - width / 2 + 5, y + 29, width - 10, 14);
+
+  ctx.fillStyle = "#ffdf75";
+  ctx.fillRect(x - width / 2 + 4, y + height - 7, 7, 4);
+  ctx.fillRect(x + width / 2 - 11, y + height - 7, 7, 4);
+
+  if (isPlayer && activeSkill === "mega") {
+    ctx.strokeStyle = "#ff9500";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(x - width / 2 - 4, y - 4, width + 8, height + 8);
+  }
+
+  ctx.restore();
 }
 
 function drawTree(x, y, size) {
@@ -924,1211 +845,92 @@ function drawTree(x, y, size) {
   ctx.fill();
 }
 
-function drawCar(x, y, width, height, color, isPlayer = false) {
-  ctx.save();
-  ctx.translate(x, y);
+function drawRoad(delta) {
+  const road = roadBounds();
 
-  if (activeSkill === "mega" && isPlayer) {
-    ctx.scale(1.3, 1.3);
-  }
-
-  if (isPlayer && activeSkill === "fly") {
-    ctx.shadowColor = "#54d9ff";
-    ctx.shadowBlur = 20;
-    ctx.translate(0, -17);
-  }
-
-  // Car shadow
-  ctx.fillStyle = "#0008";
-  ctx.fillRect(-width / 2 + 3, -height / 2 + 5, width, height);
-
-  // Wheels
-  ctx.fillStyle = "#090b10";
-  ctx.fillRect(-width / 2 - 3, -height / 2 + 12, 6, 16);
-  ctx.fillRect(width / 2 - 3, -height / 2 + 12, 6, 16);
- owScreen('menuScreen')">BACK</button>
-  </div>
-</section>
-
-<!-- GAME -->
-<section id="gameScreen" class="screen hidden">
-  <canvas id="gameCanvas"></canvas>
-
-  <div class="hud">
-    <div class="hud-card">
-      <div class="hud-title">DISTANCE</div>
-      <div class="hud-number" id="scoreDisplay">0</div>
-    </div>
-
-    <div class="hud-card">
-      <div class="hud-title">SPEED</div>
-      <div class="hud-number"><span id="speedDisplay">1.0</span><small> x</small></div>
-    </div>
-
-    <button class="pause-btn" onclick="pauseGame()">Ⅱ</button>
-  </div>
-
-  <div class="speed-bar">
-    <div class="speed-fill" id="speedFill"></div>
-  </div>
-
-  <div class="controls">
-    <button class="control-btn" id="leftBtn">◀</button>
-    <button class="control-btn" id="rightBtn">▶</button>
-  </div>
-
-  <div class="skills">
-    <button class="skill-btn" id="megaBtn" onclick="useSkill('mega')">
-      <strong>MEGA CAR</strong>
-      POWER
-      <small id="megaStatus">LOCKED</small>
-    </button>
-
-    <button class="skill-btn" id="flyBtn" onclick="useSkill('fly')">
-      <strong>FLY</strong>
-      FLIGHT
-      <small id="flyStatus">LOCKED</small>
-    </button>
-
-    <button class="skill-btn" id="slowBtn" onclick="useSkill('slow')">
-      <strong>SLOW TIME</strong>
-      CONTROL
-      <small id="slowStatus">LOCKED</small>
-    </button>
-  </div>
-</section>
-
-<!-- PAUSE -->
-<section id="pauseScreen" class="screen hidden">
-  <div class="panel">
-    <h2>GAME PAUSED</h2>
-    <p>Take a break.</p>
-    <button class="btn-main" onclick="resumeGame()">▶ RESUME</button>
-    <button class="btn-secondary" onclick="backToMenu()">MAIN MENU</button>
-  </div>
-</section>
-
-<!-- GAME OVER -->
-<section id="gameOverScreen" class="screen hidden">
-  <div class="panel">
-    <h2>GAME OVER</h2>
-    <div class="score-label">YOUR DISTANCE</div>
-    <div class="big-score" id="finalScore">0</div>
-    <p id="recordMessage"></p>
-    <button class="btn-main" onclick="startGame()">↻ PLAY AGAIN</button>
-    <button class="btn-secondary" onclick="backToMenu()">MAIN MENU</button>
-  </div>
-</section>
-
-<!-- FINISH -->
-<section id="finishScreen" class="screen hidden">
-  <div class="finish-face">🏁</div>
-  <h1 style="color:#ff8500;margin-top:20px">HIGHWAY COMPLETE!</h1>
-  <p class="result-sub">YOU REACHED THE FINISH LINE</p>
-  <div class="big-score">1000</div>
-  <button class="btn-main" style="width:80%;max-width:320px" onclick="backToMenu()">BACK TO MENU</button>
-</section>
-
-<script>
-/* =========================
-   HIGHWAY RUSH GAME ENGINE
-========================= */
-
-const $ = id => document.getElementById(id);
-
-const screenIDs = [
-  "introScreen", "menuScreen", "highScoreScreen",
-  "settingsScreen", "gameScreen", "pauseScreen",
-  "gameOverScreen", "finishScreen"
-];
-
-function showScreen(id) {
-  screenIDs.forEach(name => $(name).classList.add("hidden"));
-  $(id).classList.remove("hidden");
-}
-
-/* =========================
-   SOUND ENGINE - OFFLINE
-========================= */
-
-let soundOn = localStorage.getItem("hrSound") !== "off";
-let audio = null;
-
-function initAudio() {
-  if (!audio) {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) audio = new AudioContextClass();
-  }
-
-  if (audio && audio.state === "suspended") {
-    audio.resume();
-  }
-}
-
-function tone(freq, duration, type = "sine", volume = .07, endFreq = null) {
-  if (!soundOn) return;
-
-  initAudio();
-  if (!audio) return;
-
-  const osc = audio.createOscillator();
-  const gain = audio.createGain();
-
-  const now = audio.currentTime;
-
-  osc.type = type;
-  osc.frequency.setValueAtTime(freq, now);
-
-  if (endFreq) {
-    osc.frequency.exponentialRampToValueAtTime(
-      Math.max(1, endFreq), now + duration
-    );
-  }
-
-  gain.gain.setValueAtTime(volume, now);
-  gain.gain.exponentialRampToValueAtTime(.001, now + duration);
-
-  osc.connect(gain);
-  gain.connect(audio.destination);
-
-  osc.start(now);
-  osc.stop(now + duration);
-}
-
-function playSound(name) {
-  if (!soundOn) return;
-
-  switch (name) {
-    case "click":
-      tone(500, .07, "square", .035, 700);
-      break;
-
-    case "start":
-      tone(300, .12, "sawtooth", .05, 650);
-      setTimeout(() => tone(650, .16, "sawtooth", .04, 950), 120);
-      break;
-
-    case "lane":
-      tone(260, .07, "triangle", .035, 180);
-      break;
-
-    case "skill":
-      tone(300, .3, "sawtooth", .06, 900);
-      setTimeout(() => tone(850, .15, "sine", .04, 1200), 150);
-      break;
-
-    case "crash":
-      tone(180, .35, "sawtooth", .08, 45);
-      setTimeout(() => tone(90, .2, "square", .04, 35), 100);
-      break;
-
-    case "finish":
-      tone(440, .2, "triangle", .06, 660);
-      setTimeout(() => tone(660, .2, "triangle", .06, 880), 200);
-      setTimeout(() => tone(880, .4, "triangle", .06, 1200), 400);
-      break;
-
-    case "pause":
-      tone(400, .1, "sine", .04, 250);
-      break;
-  }
-}
-
-function toggleSound() {
-  soundOn = !soundOn;
-  localStorage.setItem("hrSound", soundOn ? "on" : "off");
-  updateSoundButton();
-
-  if (soundOn) playSound("click");
-}
-
-function updateSoundButton() {
-  $("soundToggle").textContent = "SOUND: " + (soundOn ? "ON" : "OFF");
-}
-
-updateSoundButton();
-
-/* =========================
-   INTRO
-========================= */
-
-const introText = "ADIT ®";
-
-[...introText].forEach((char, index) => {
-  const span = document.createElement("span");
-  span.textContent = char === " " ? "\u00a0" : char;
-  span.style.animationDelay = (index * .18) + "s";
-  $("introName").appendChild(span);
-});
-
-setTimeout(() => {
-  showScreen("menuScreen");
-}, 2500);
-
-/* =========================
-   MENU
-========================= */
-
-function showHighScore() {
-  playSound("click");
-  $("bestScore").textContent = localStorage.getItem("hrBest") || 0;
-  showScreen("highScoreScreen");
-}
-
-function showSettings() {
-  playSound("click");
-  updateSoundButton();
-  showScreen("settingsScreen");
-}
-
-/* =========================
-   CANVAS
-========================= */
-
-const canvas = $("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-let W = 0;
-let H = 0;
-let roadWidth = 0;
-let laneWidth = 0;
-let roadLeft = 0;
-
-function resizeCanvas() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-  W = window.innerWidth;
-  H = window.innerHeight;
-
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-
-  canvas.style.width = W + "px";
-  canvas.style.height = H + "px";
-
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  roadWidth = Math.min(W * .76, 430);
-  roadLeft = (W - roadWidth) / 2;
-  laneWidth = roadWidth / 3;
-}
-
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
-/* =========================
-   GAME VARIABLES
-========================= */
-
-let running = false;
-let paused = false;
-
-let score = 0;
-let speed = 1;
-let playerLane = 1;
-let playerX = 0;
-let playerY = 0;
-
-let obstacles = [];
-let trees = [];
-let tireMarks = [];
-
-let roadOffset = 0;
-let spawnTimer = 0;
-let lastTime = 0;
-
-let activeSkill = null;
-let skillEnd = 0;
-let cooldownEnd = 0;
-
-const skillDuration = {
-  mega: 50000,
-  fly: 40000,
-  slow: 60000
-};
-
-const unlockScore = 150;
-const cooldownDuration = 90000;
-
-/* =========================
-   START GAME
-========================= */
-
-function startGame() {
-  initAudio();
-  playSound("start");
-
-  score = 0;
-  speed = 1;
-
-  playerLane = 1;
-  playerX = roadLeft + laneWidth * 1.5;
-  playerY = H - 170;
-
-  obstacles = [];
-  trees = [];
-  tireMarks = [];
-
-  roadOffset = 0;
-  spawnTimer = 0;
-
-  activeSkill = null;
-  skillEnd = 0;
-  cooldownEnd = 0;
-
-  running = true;
-  paused = false;
-
-  showScreen("gameScreen");
-  updateHUD();
-
-  lastTime = performance.now();
-  requestAnimationFrame(gameLoop);
-}
-
-/* =========================
-   STEERING
-========================= */
-
-function changeLane(direction) {
-  if (!running || paused) return;
-
-  const oldLane = playerLane;
-
-  playerLane = Math.max(0, Math.min(2, playerLane + direction));
-
-  if (oldLane !== playerLane) {
-    tireMarks.push({
-      x: playerX,
-      y: playerY + 25,
-      life: 1
-    });
-
-    playSound("lane");
-  }
-}
-
-$("leftBtn").addEventListener("pointerdown", e => {
-  e.preventDefault();
-  changeLane(-1);
-});
-
-$("rightBtn").addEventListener("pointerdown", e => {
-  e.preventDefault();
-  changeLane(1);
-});
-
-document.addEventListener("keydown", e => {
-  if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") {
-    changeLane(-1);
-  }
-
-  if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") {
-    changeLane(1);
-  }
-
-  if (e.key === "Escape" && running) {
-    paused ? resumeGame() : pauseGame();
-  }
-});
-
-/* =========================
-   SKILLS
-========================= */
-
-function useSkill(type) {
-  if (!running || paused) return;
-  if (score < unlockScore) return;
-  if (activeSkill) return;
-  if (performance.now() < cooldownEnd) return;
-
-  activeSkill = type;
-  skillEnd = performance.now() + skillDuration[type];
-
-  playSound("skill");
-  updateHUD();
-}
-
-function endSkill() {
-  if (!activeSkill) return;
-
-  activeSkill = null;
-  cooldownEnd = performance.now() + cooldownDuration;
-  updateHUD();
-}
-
-function updateSkills() {
-  const now = performance.now();
-
-  if (activeSkill && now >= skillEnd) {
-    endSkill();
-  }
-
-  const unlocked = score >= unlockScore;
-  const cooling = now < cooldownEnd;
-
-  ["mega", "fly", "slow"].forEach(type => {
-    const btn = $(type + "Btn");
-    const status = $(type + "Status");
-
-    btn.classList.toggle("active", activeSkill === type);
-
-    btn.disabled =
-      !unlocked ||
-      !!activeSkill ||
-      cooling ||
-      !running ||
-      paused;
-
-    if (!unlocked) {
-      status.textContent = "UNLOCK 150";
-    } else if (activeSkill === type) {
-      status.textContent = Math.ceil((skillEnd - now) / 1000) + " SEC";
-    } else if (activeSkill) {
-      status.textContent = "IN USE";
-    } else if (cooling) {
-      status.textContent = "COOLDOWN " +
-        Math.ceil((cooldownEnd - now) / 1000) + "s";
-    } else {
-      status.textContent = "READY";
-    }
-  });
-}
-
-/* =========================
-   SPAWNING
-========================= */
-
-function spawnOsoundEnabled;
-  localStorage.setItem("hrSound", soundEnabled ? "on" : "off");
-  updateSoundButton();
-  beep(500, .08);
-}
-
-function updateSoundButton() {
-  $("soundButton").textContent = "SOUND: " + (soundEnabled ? "ON" : "OFF");
-}
-
-function beep(frequency = 400, duration = .1) {
-  if (!soundEnabled) return;
-
-  try {
-    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
-
-    if (audioContext.state === "suspended") {
-      audioContext.resume();
-    }
-
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-
-    oscillator.frequency.value = frequency;
-    oscillator.type = "sine";
-    gain.gain.setValueAtTime(.08, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(.001, audioContext.currentTime + duration);
-
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + duration);
-  } catch (error) {}
-}
-
-updateSoundButton();
-
-/* MENU */
-
-function showHighScore() {
-  $("bestScoreDisplay").textContent = localStorage.getItem("hrBest") || 0;
-  showScreen("highScoreScreen");
-}
-
-function showSettings() {
-  updateSoundButton();
-  showScreen("settingsScreen");
-}
-
-/* CANVAS */
-
-const canvas = $("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-let W = 0;
-let H = 0;
-let roadWidth = 0;
-let laneWidth = 0;
-let roadLeft = 0;
-
-function resizeCanvas() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-  W = window.innerWidth;
-  H = window.innerHeight;
-
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-
-  canvas.style.width = W + "px";
-  canvas.style.height = H + "px";
-
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  roadWidth = Math.min(W * .76, 430);
-  roadLeft = (W - roadWidth) / 2;
-  laneWidth = roadWidth / 3;
-}
-
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
-/* GAME VARIABLES */
-
-let running = false;
-let paused = false;
-let score = 0;
-let speed = 1;
-let playerLane = 1;
-let playerX = 0;
-let obstacles = [];
-let trees = [];
-let tireMarks = [];
-let roadOffset = 0;
-let lastTime = 0;
-let spawnTimer = 0;
-
-const player = {
-  width: 32,
-  height: 56,
-  y: 0
-};
-
-let activeSkill = null;
-let skillEnd = 0;
-let cooldownEnd = 0;
-
-const SKILL_DURATION = {
-  mega: 50,
-  fly: 40,
-  slow: 60
-};
-
-const SKILL_UNLOCK_SCORE = 150;
-const SKILL_COOLDOWN = 90;
-
-/* GAME START */
-
-function startGame() {
-  score = 0;
-  speed = 1;
-  playerLane = 1;
-  playerX = roadLeft + laneWidth * 1.5;
-  player.y = H - 170;
-
-  obstacles = [];
-  trees = [];
-  tireMarks = [];
-
-  roadOffset = 0;
-  spawnTimer = 0;
-
-  activeSkill = null;
-  skillEnd = 0;
-  cooldownEnd = 0;
-
-  paused = false;
-  running = true;
-
-  showScreen("gameScreen");
-  updateHUD();
-
-  lastTime = performance.now();
-  requestAnimationFrame(gameLoop);
-}
-
-/* MOVEMENT */
-
-function changeLane(direction) {
-  if (!running || paused) return;
-
-  const oldX = playerX;
-
-  playerLane = Math.max(0, Math.min(2, playerLane + direction));
-
-  const newX = roadLeft + laneWidth * (playerLane + .5);
-
-  if (oldX !== newX) {
-    tireMarks.push({
-      x: oldX,
-      y: player.y + player.height,
-      life: 1
-    });
-    beep(250, .06);
-  }
-}
-
-$("leftBtn").addEventListener("pointerdown", () => changeLane(-1));
-$("rightBtn").addEventListener("pointerdown", () => changeLane(1));
-
-document.addEventListener("keydown", event => {
-  if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
-    changeLane(-1);
-  }
-
-  if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") {
-    changeLane(1);
-  }
-
-  if (event.key === "Escape" && running) {
-    paused ? resumeGame() : pauseGame();
-  }
-});
-
-/* SKILLS */
-
-function useSkill(type) {
-  if (!running || paused) return;
-  if (score < SKILL_UNLOCK_SCORE) return;
-  if (activeSkill || performance.now() < cooldownEnd) return;
-
-  activeSkill = type;
-  skillEnd = performance.now() + SKILL_DURATION[type] * 1000;
-
-  beep(750, .2);
-  updateHUD();
-}
-
-function endSkill() {
-  if (!activeSkill) return;
-
-  activeSkill = null;
-  cooldownEnd = performance.now() + SKILL_COOLDOWN * 1000;
-
-  updateHUD();
-}
-
-function updateSkills() {
-  const now = performance.now();
-
-  if (activeSkill && now >= skillEnd) {
-    endSkill();
-  }
-
-  const unlocked = score >= SKILL_UNLOCK_SCORE;
-  const cooling = now < cooldownEnd;
-
-  ["mega", "fly", "slow"].forEach(type => {
-    const button = $(type + "Btn");
-    const status = $(type + "Status");
-
-    button.classList.toggle("active", activeSkill === type);
-
-    button.disabled =
-      !unlocked ||
-      !!activeSkill ||
-      cooling ||
-      !running ||
-      paused;
-
-    if (!unlocked) {
-      status.textContent = "UNLOCK AT 150";
-    } else if (activeSkill === type) {
-      status.textContent = Math.ceil((skillEnd - now) / 1000) + "s";
-    } else if (activeSkill) {
-      status.textContent = "IN USE";
-    } else if (cooling) {
-      status.textContent = "COOLDOWN " + Math.ceil((cooldownEnd - now) / 1000) + "s";
-    } else {
-      status.textContent = "READY";
-    }
-  });
-}
-
-/* SPAWNING */
-
-function spawnObstacle() {
-  const lane = Math.floor(Math.random() * 3);
-
-  obstacles.push({
-    lane,
-    x: roadLeft + laneWidth * (lane + .5),
-    y: -90,
-    width: 34,
-    height: 58,
-    color: ["#d84a35", "#3b91d8", "#e0b33f"][Math.floor(Math.random() * 3)]
-  });
-}
-
-function spawnTree() {
-  const side = Math.random() < .5 ? -1 : 1;
-
-  trees.push({
-    x: side < 0 ? roadLeft - 25 : roadLeft + roadWidth + 25,
-    y: -35,
-    size: 12 + Math.random() * 12
-  });
-}
-
-/* DRAW ROAD */
-
-function drawRoad() {
-  ctx.fillStyle = "#101b13";
+  ctx.fillStyle = "#15291d";
   ctx.fillRect(0, 0, W, H);
 
-  ctx.fillStyle = "#30343a";
-  ctx.fillRect(roadLeft, 0, roadWidth, H);
+  ctx.fillStyle = "#282e38";
+  ctx.fillRect(road.left, 0, road.width, H);
 
-  ctx.fillStyle = "#f4f0df";
-  ctx.fillRect(roadLeft + 5, 0, 3, H);
-  ctx.fillRect(roadLeft + roadWidth - 8, 0, 3, H);
+  ctx.fillStyle = "#ff762c";
+  ctx.fillRect(road.left - 4, 0, 4, H);
+  ctx.fillRect(road.right, 0, 4, H);
 
-  ctx.strokeStyle = "#aeb4ba";
-  ctx.lineWidth = 3;
-  ctx.setLineDash([30, 25]);
-
-  ctx.lineDashOffset = -roadOffset;
+  roadOffset += delta * speed * 0.32;
+  ctx.fillStyle = "#dce0e6";
 
   for (let i = 1; i <= 2; i++) {
-    const x = roadLeft + laneWidth * i;
+    const x = road.left + road.width * i / 3;
 
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, H);
-    ctx.stroke();
+    for (let y = -70 + roadOffset % 70; y < H; y += 70) {
+      ctx.fillRect(x - 2, y, 4, 35);
+    }
   }
 
-  ctx.setLineDash([]);
+  ctx.fillStyle = "#1b3525";
 
-  roadOffset += speed * 5;
-
-  if (roadOffset > 55) roadOffset = 0;
+  for (let y = -40 + roadOffset % 80; y < H; y += 80) {
+    ctx.fillRect(0, y, road.left - 5, 3);
+    ctx.fillRect(road.right + 5, y, W - road.right, 3);
+  }
 }
 
-/* DRAW TREES */
+function drawScene(delta) {
+  if (!W || !H) return;
 
-function drawTrees(dt) {
-  if (Math.random() < .045) spawnTree();
+  drawRoad(delta);
 
   trees.forEach(tree => {
-    tree.y += speed * 4 * dt;
-
-    ctx.fillStyle = "#633d21";
-    ctx.fillRect(tree.x - 3, tree.y, 6, 18);
-
-    ctx.fillStyle = "#207b3d";
-    ctx.beginPath();
-    ctx.arc(tree.x, tree.y, tree.size, 0, Math.PI * 2);
-    ctx.fill();
+    drawTree(tree.x, tree.y, tree.size);
   });
 
-  trees = trees.filter(tree => tree.y < H + 50);
-}
-
-/* DRAW CARS */
-
-function drawCar(x, y, color, isPlayer = false) {
-  const width = isPlayer && activeSkill === "mega" ? 48 : 34;
-  const height = isPlayer && activeSkill === "mega" ? 72 : 56;
-
-  if (isPlayer && activeSkill === "fly") {
-    y -= 35;
-  }
-
-  ctx.fillStyle = "#08090b";
-  ctx.fillRect(x - width / 2 - 4, y + 9, 5, height - 16);
-  ctx.fillRect(x + width / 2 - 1, y + 9, 5, height - 16);
-
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.roundRect(x - width / 2, y, width, height, 8);
-  ctx.fill();
-
-  ctx.fillStyle = "#b7d8ed";
-  ctx.fillRect(x - width / 2 + 5, y + 9, width - 10, 13);
-
-  ctx.fillStyle = "#111820";
-  ctx.fillRect(x - width / 2 + 5, y + 29, width - 10, 14);
-
-  ctx.fillStyle = "#ffdf75";
-  ctx.fillRect(x - width / 2 + 4, y + height - 7, 7, 4);
-  ctx.fillRect(x + width / 2 - 11, y + height - 7, 7, 4);
-
-  if (isPlayer && activeSkill === "mega") {
-    ctx.strokeStyle = "#ff9500";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(x - width / 2 - 4, y - 4, width + 8, height + 8);
-  }
-}
-
-/* TIRE MARKS */
-
-function drawTireMarks(dt) {
-  tireMarks.forEach(mark => {
-    mark.life -= .018 * dt;
-
-    ctx.fillStyle = `rgba(10,10,10,${Math.max(0, mark.life * .5)})`;
-    ctx.fillRect(mark.x - 12, mark.y, 4, 20);
-    ctx.fillRect(mark.x + 8, mark.y, 4, 20);
+  obstacles.forEach(obstacle => {
+    drawCar(
+      laneCenter(obstacle.lane),
+      obstacle.y,
+      obstacle.color,
+      false
+    );
   });
 
-  tireMarks = tireMarks.filter(mark => mark.life > 0);
+  const playerY = H - 135;
+  player.y = playerY;
+
+  drawCar(
+    laneCenter(player.lane),
+    playerY,
+    "#ff7027",
+    true
+  );
 }
 
-/* COLLISION */
-
-function checkCollision(obstacle) {
-  const playerWidth = activeSkill === "mega" ? 48 : 34;
-
-  const playerLeft = playerX - playerWidth / 2;
-  const playerRight = playerX + playerWidth / 2;
-  const playerTop = player.y;
-  const playerBottom = player.y + player.height;
-
-  const hit =
-    playerLeft < obstacle.x + obstacle.width / 2 &&
-    playerRight > obstacle.x - obstacle.width / 2 &&
-    playerTop < obstacle.y + obstacle.height &&
-    playerBottom > obstacle.y;
-
-  return hit;
-}
-
-/* HUD */
+/* GAME FLOW */
 
 function updateHUD() {
   $("scoreDisplay").textContent = Math.floor(score);
-  $("speedDisplay").textContent = speed.toFixed(1);
-
-  updateSkills();
+  $("speedDisplay").textContent = speed.toFixed(1) + "x";
+  $("speedFill").style.width = Math.min(100, speed * 25) + "%";
+  updateSkillUI();
 }
 
-/* GAME LOOP */
+function startGame() {
+  stopMusic();
 
-function gameLoop(now) {
-  if (!running || paused) return;
+  score = 0;
+  speed = 1;
+  roadOffset = 0;
+  spawnTimer = 0;
+  obstacles = [];
+  trees = [];
 
-  const dt = Math.min((now - lastTime) / 16.67, 2);
-  lastTime = now;
+  player.lane = 1;
+  activeSkill = null;
+  cooldownEndTime = 0;
+  skillEndTime = 0;
 
-  const slow = activeSkill === "slow";
-  const gameSpeed = slow ? .45 : 1;
-
-  speed = 1 + Math.min(score / 250, 3);
-
-  score += .35 * gameSpeed * dt;
-
-  if (score >= 1000) {
-    score = 1000;
-    finishGame();
-    return;
-  }
-
-  player.y = H - 170;
-
-  const targetX = roadLeft + laneWidth * (playerLane + .5);
-  playerX += (targetX - playerX) * .25;
-
-  drawRoad();
-  drawTrees(dt * gameSpeed);
-  drawTireMarks(dt);
-
-  spawnTimer += dt * gameSpeed;
-
-  if (spawnTimer > Math.max(25, 75 - speed * 9)) {
-    spawnObstacle();
-    spawnTimer = 0;
-  }
-
-  obstacles.forEach(obstacle => {
-    obstacle.y += speed * 4.2 * gameSpeed * dt;
-
-    drawCar(obstacle.x, obstacle.y, obstacle.color);
-
-    if (checkCollision(obstacle)) {
-      if (activeSkill === "mega" || activeSkill === "fly") {
-        obstacle.y = H + 100;
-        beep(180, .08);
-      } else {
-        endGame();
-      }
-    }
-  });
-
-  obstacles = obstacles.filter(obstacle => obstacle.y < H + 100);
-
-  drawCar(playerX, player.y, "#ff8500", true);
-
-  updateHUD();
-
-  requestAnimationFrame(gameLoop);
-}
-
-/* PAUSE */
-
-function pauseGame() {
-  if (!running || paused) return;
-
-  paused = true;
-  showScreen("pauseScreen");
-}
-
-function resumeGame() {
-  if (!running || !paused) return;
-
+  running = true;
   paused = false;
-  showScreen("gction drawTree(x,y){
- ctx.fillStyle="#75421d";
- ctx.fillRect(x-4,y+5,8,19);
- ctx.fillStyle="#126b2c";
- ctx.beginPath();
- ctx.arc(x,y,15,0,Math.PI*2);
- ctx.fill();
- ctx.fillStyle="#218b37";
- ctx.beginPath();
- ctx.arc(x-6,y-5,10,0,Math.PI*2);
- ctx.fill();
-}
 
-function drawRoad(){
- ctx.fillStyle="#35733a";
- ctx.fillRect(0,0,390,560);
-
- trees.forEach(t=>drawTree(t.x,t.y));
-
- ctx.fillStyle="#34383d";
- ctx.fillRect(60,0,270,560);
-
- ctx.fillStyle="#eee";
- ctx.fillRect(60,0,5,560);
- ctx.fillRect(325,0,5,560);
-
- ctx.fillStyle="#eee";
- for(let y=-80;y<600;y+=80){
-  ctx.fillRect(148,y+roadOffset,4,40);
-  ctx.fillRect(238,y+roadOffset,4,40);
- }
-
- // Bekas ban
- tireMarks.forEach(mark=>{
-  ctx.globalAlpha=mark.life*.55;
-  ctx.fillStyle="#151515";
-  ctx.fillRect(mark.x-12,mark.y,3,25);
-  ctx.fillRect(mark.x+9,mark.y,3,25);
-  ctx.globalAlpha=1;
- });
-}
-
-/* UPDATE */
-function spawnObstacle(){
- const l=Math.floor(Math.random()*3);
- obstacles.push({x:lanes[l],y:-50,passed:false});
-}
-
-function update(dt){
- const step=dt/16;
- const slowActive=skills.slow>0;
- const currentSpeed=slowActive?3:speed;
-
- roadOffset=(roadOffset+currentSpeed*step)%80;
-
- // Skill countdown and shared cooldown
- if(activeSkill!==null){
-  skills[activeSkill]=Math.max(0,skills[activeSkill]-dt/1000);
-  if(skills[activeSkill]===0){
-   activeSkill=null;
-   globalCooldown=90;
-  }
- }else if(globalCooldown>0){
-  globalCooldown=Math.max(0,globalCooldown-dt/1000);
- }
-
- playerX+=(lanes[lane]-playerX)*Math.min(1,dt/75);
-
- trees.forEach(t=>{
-  t.y+=currentSpeed*step;
-  if(t.y>590){
-   t.y=-30;
-   t.x=Math.random()<.5?35:355;
-  }
- });
-
- tireMarks.forEach(m=>{
-  m.y+=currentSpeed*step;
-  m.life-=dt/5000;
- });
- tireMarks=tireMarks.filter(m=>m.life>0);
-
- spawnTimer+=dt;
- if(spawnTimer>Math.max(450,1050-score*2)){
-  spawnObstacle();
-  spawnTimer=0;
- }
-
- const playerY=skills.fly>0?425:455;
-
- for(const o of obstacles){
-  o.y+=currentSpeed*step;
-  const close=Math.abs(o.y-playerY)<34&&Math.abs(o.x-playerX)<35;
-
-  if(close){
-   if(skills.mega>0){
-    o.y=700;
-    score+=5;
-   }else if(skills.fly<=0){
-    endGame();
-    return;
-   }
-  }
-
-  if(o.y>580&&!o.passed){
-   o.passed=true;
-   score++;
-  }
- }
-
- obstacles=obstacles.filter(o=>o.y<620);
-
- if(!slowActive)speed=3+score*.035;
-
- document.getElementById("score").textContent=score;
- document.getElementById("speed").textContent=(currentSpeed/3).toFixed(1)+"x";
-
- updateSkillButtons();
-
- if(score>=1000){
-  finishGame();
-  return;
- }
-}
-
-function draw(){
- drawRoad();
-
- obstacles.forEach(o=>drawCar(o.x,o.y,"#e64b42"));
-
- if(skills.fly>0){
-  ctx.globalAlpha=.25;
-  drawCar(playerX,465,"#111");
-  ctx.globalAlpha=1;
- }
-
- const size=skills.mega>0?1.55:1;
- const playerY=skills.fly>0?425:455;
-
- drawCar(playerX,playerY,skills.mega>0?"#ffb52e":"#168de0",size);
-
- if(skills.fly>0){
-  ctx.fillStyle="white";
-  ctx.font="bold 14px Arial";
-  ctx.fillText("FLYING",playerX-25,playerY-35);
- }
- if(skills.mega>0){
-  ctx.fillStyle="#ffdb69";
-  ctx.font="bold 12px Arial";
-  ctx.fillText("MEGA",playerX-20,playerY-40);
- }
-}
-
-function updateSkillButtons(){
- const names=["mega","fly","slow"];
- const labels={
-  mega:"🚙 MEGA CAR",
-  fly:"✈️ FLY",
-  slow:"🐢 SLOW TIME"
- };
-
- names.forEach(name=>{
-  const b=document.getElementById(name);
-
-  if(score<150){
-   b.disabled=true;
-   b.innerHTML=labels[name]+"<br>🔒 SCORE 150";
-  }else if(activeSkill===name){
-   b.disabled=true;
-   b.innerHTML=labels[name]+"<br>AKTIF "+Math.ceil(skills[name])+"s";
-  }else if(activeSkill!==null){
-   b.disabled=true;
-   b.innerHTML=labels[name]+"<br>SKILL LAIN AKTIF";
-  }else if(globalCooldown>0){
-   b.disabled=true;
-   b.innerHTML=labels[name]+"<br>COOLDOWN "+Math.ceil(globalCooldown)+"s";
-  }else{
-   b.disabled=false;
-   b.innerHTML=labels[name]+"<br>SIAP!";
-  }
- });
-}
-
-/* GAME LOOP */
-function loop(time){
- if(!running)return;
- const dt=lastTime?Math.min(time-lastTime,40):16;
- lastTime=time;
-
- update(dt);
- if(!running)return;
-
- draw();
- requestAnimationFrame(loop);
-}
-
-/* GAME OVER */
-function saveBest(){
- if(score>bestScore){
-  bestScore=score;
-  localStorage.setItem("hrBest",String(bestScore));
- }
- document.getElementById("best").textContent=bestScore;
-}
-
-function endGame(){
- running=false;
- saveBest();
- playBeep(150,.5);
-
- document.getElementById("finalScore").textContent=score;
- document.getElementById("finalBest").textContent=bestScore;
- showScreen("gameOverScreen");
-}
-
-/* FINISH */
-function finishGame(){
- running=false;
- score=1000;
- saveBest();
- playBeep(900,.4);
-
- document.getElementById("finishScreen").classList.remove("hidden");
-
- const flash=document.getElementById("flash");
- flash.style.opacity="1";
- setTimeout(()=>flash.style.opacity="0",120);
-}
-
-/* KEYBOARD */
-document.addEventListener("keydown",e=>{
- if(e.key==="ArrowLeft"||e.key==="a")move(-1);
- if(e.key==="ArrowRight"||e.key==="d")move(1);
- if(e.key==="1")activateSkill("mega");
- if(e.key==="2")activateSkill("fly");
- if(e.key==="3")activateSkill("slow");
-});
-
-/* SWIPE */
-let touchStart=null;
-canvas.addEventListener("touchstart",e=>{
- touchStart=e.touches[0].clientX;
-},{passive:true});
-
-canvas.addEventListener("touchend",e=>{
- if(touchStart===null)return;
- const delta=e.changedTouches[0].clientX-touchStart;
- if(Math.abs(delta)>25)move(delta>0?1:-1);
- touchStart=null;
-},{passive:true});
-
-updateSkillButtons();
-</script>
-</body>
-  </html>
-
+  showScreen("gameScree
